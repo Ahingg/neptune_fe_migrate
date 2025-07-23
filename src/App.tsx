@@ -40,6 +40,8 @@ const App: React.FC = () => {
                     <Route element={<ProtectedRoute />}>
                         <Route path="/" element={<DashboardPage />} />
                         <Route path="/class/:classId" element={<ClassDetailPage />} />
+                    </Route>
+                    <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
                         <Route path="/cases" element={<Suspense fallback={<div>Loading...</div>}><CasePage /></Suspense>} />
                         <Route path="/contests" element={<Suspense fallback={<div>Loading...</div>}><ContestPage /></Suspense>} />
                         <Route path="/classes" element={<Suspense fallback={<div>Loading...</div>}><ClassPage /></Suspense>} />
