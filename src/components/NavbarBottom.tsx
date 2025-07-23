@@ -10,8 +10,10 @@ type NavLinkInfo = {
     roles?: Array<'admin' | 'student'>;
 };
 const allNavLinks: NavLinkInfo[] = [
-    { to: '/dashboard', label: 'Dashboard', roles: ['student', 'admin'] },
-    { to: '/contests', label: 'Contests', roles: ['student'] },
+    { to: '/', label: 'Dashboard', roles: ['admin', 'student'] },
+    { to: '/contests', label: 'Contests', roles: ['admin', 'student'] },
+    { to: '/cases', label: 'Cases', roles: ['admin'] },
+    { to: '/classes', label: 'Classes', roles: ['admin'] },
     { to: '/submission', label: 'Submission', roles: ['student'] },
     { to: '/leaderboard', label: 'Leaderboard', roles: ['student', 'admin'] },
 ];
@@ -21,7 +23,7 @@ const allNavLinks: NavLinkInfo[] = [
 const NavbarBottom: React.FC = () => {
     const isAdmin = useAtomValue(isAdminAtom);
     const isStudent = useAtomValue(isStudentAtom);
-    const isAuthenticated = useAtomValue(isAuthenticatedAtom) ;
+    const isAuthenticated = useAtomValue(isAuthenticatedAtom);
 
     const { logout } = useAuth();
 
@@ -49,10 +51,9 @@ const NavbarBottom: React.FC = () => {
                             key={link.to}
                             to={link.to}
                             className={({ isActive }) =>
-                                `px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
-                                    isActive
-                                        ? 'bg-blue-100 text-blue-700 shadow-inner'
-                                        : 'text-gray-700 hover:bg-blue-500 hover:text-blue-50'
+                                `px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${isActive
+                                    ? 'bg-blue-100 text-blue-700 shadow-inner'
+                                    : 'text-gray-700 hover:bg-blue-500 hover:text-blue-50'
                                 }`
                             }
                         >

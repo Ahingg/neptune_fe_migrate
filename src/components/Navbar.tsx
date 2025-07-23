@@ -11,12 +11,12 @@ import {
 const Navbar: React.FC = () => {
     const user = useAtomValue(userAtom);
     const isAuthenticated = useAtomValue(isAuthenticatedAtom);
-    
-    
 
-    
 
-    
+
+
+
+
 
     return (
         // Main container now uses a column layout

@@ -133,37 +133,39 @@ const ContestPage: React.FC = () => {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Contests</h1>
-                <div className="flex gap-2">
-                    <button className="btn btn-outline" onClick={handleAdd}>+ Add New Contest</button>
+            <div className="bg-white rounded-xl shadow p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-2xl font-bold text-gray-800">Contests</h1>
+                    <div className="flex gap-2">
+                        <button className="btn btn-outline btn-neutral text-gray-800 border-gray-700 hover:bg-gray-800 hover:text-white" onClick={handleAdd}>+ Add New Contest</button>
+                    </div>
                 </div>
-            </div>
-            {feedback && <div className="mb-2 text-green-600">{feedback}</div>}
-            {(loading || assignmentsLoading) && <div>Loading...</div>}
-            {error && <div className="text-red-500">{error}</div>}
-            <div className="overflow-x-auto">
-                <table className="table w-full">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {contests.map((c: any) => (
-                            <tr key={c.id}>
-                                <td>{c.name}</td>
-                                <td>{c.description}</td>
-                                <td>
-                                    <button className="btn btn-sm btn-info mr-2" onClick={() => handleEdit(c)}>Edit</button>
-                                    <button className="btn btn-sm btn-outline" onClick={() => handleDelete(c.id)}>Delete</button>
-                                </td>
+                {feedback && <div className="mb-2 text-green-700 text-gray-800">{feedback}</div>}
+                {(loading || assignmentsLoading) && <div className="text-gray-800">Loading...</div>}
+                {error && <div className="text-red-700 text-gray-800">{error}</div>}
+                <div className="overflow-x-auto">
+                    <table className="table w-full text-gray-800">
+                        <thead>
+                            <tr className="bg-gray-200 text-gray-900">
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {contests.map((c: any) => (
+                                <tr key={c.id} className="hover:bg-gray-100">
+                                    <td>{c.name}</td>
+                                    <td>{c.description}</td>
+                                    <td>
+                                        <button className="btn btn-sm btn-neutral text-white border-gray-700 hover:bg-gray-800 hover:text-white mr-2" onClick={() => handleEdit(c)}>Edit</button>
+                                        <button className="btn btn-sm btn-outline btn-error text-gray-800 border-gray-700 hover:bg-red-800 hover:text-white" onClick={() => handleDelete(c.id)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <ContestFormModal
                 open={showModal}
