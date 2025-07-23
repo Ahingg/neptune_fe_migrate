@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useCases } from '../../hooks/useCases';
+import useCases from '../../hooks/useCases';
 import type { Case } from '../../types/case';
 import CaseFormModal from '../../components/case/CaseFormModal';
 import TestCaseUploadModal from '../../components/case/TestCaseUploadModal';

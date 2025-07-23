@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import * as caseApi from "../api/case";
 import type { Case } from "../types/case";
 
-export function useCases() {
+function useCases() {
   const [cases, setCases] = useState<Case[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -84,3 +84,5 @@ export function useCases() {
     setCases, // Expose for advanced use
   };
 }
+
+export default useCases;
