@@ -11,7 +11,7 @@ const ClassDetailPage: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="min-h-screen flex items-center justify-center bg-base-300">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
             </div>
         );
@@ -19,7 +19,7 @@ const ClassDetailPage: React.FC = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="min-h-screen flex items-center justify-center bg-base-300">
                 <p className="text-red-500">{error}</p>
             </div>
         );

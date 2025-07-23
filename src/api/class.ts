@@ -6,7 +6,7 @@ import type { Class, ClassContestAssignment } from "../types/class";
  * @param classId The ID of the class.
  */
 export const getClassByIdApi = async (classId: string): Promise<Class> => {
-  const response = await axiosClient.get<Class>(`/api/class-detail/${classId}`);
+  const response = await axiosClient.get<Class>(`/api/class-detail?class_transaction_id=${classId}`);
   return response.data;
 };
 

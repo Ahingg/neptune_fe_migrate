@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import ContestCard from '../cards/ContestCard';
+import type { ClassContestAssignment } from '../../types/class';
 
 type FilterType = 'Current' | 'Future' | 'Past';
 
@@ -33,7 +34,7 @@ const ContestList: React.FC<ContestListProps> = ({ contests }) => {
     };
 
     return (
-        <div className="bg-blue-50 shadow-lg rounded-2xl p-6 border border-gray-200 h-full">
+        <div className="bg-base-300 shadow-lg rounded-2xl p-6 border border-gray-600 h-full">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-blue-800">
                     Assigned Contests
@@ -44,13 +45,10 @@ const ContestList: React.FC<ContestListProps> = ({ contests }) => {
                             <a
                                 key={f}
                                 className={`tab 
-        transition-all duration-200 
-        text-blue-500 
-        border border-blue-300
-        hover:font-bold hover:border-blue-600 hover:text-blue-300 
+         hover:border-blue-600
         ${
             filter === f
-                ? 'tab-active border-2 border-blue-600 font-bold text-blue-600 hover:text-blue-800 '
+                ? 'tab-active border-2 border-blue-600 font-bold text-blue-600 hover:text-blue-500 '
                 : ''
         }
         ${index === 0 ? 'rounded-l-lg' : ''}

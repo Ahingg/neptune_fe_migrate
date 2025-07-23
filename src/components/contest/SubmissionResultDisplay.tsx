@@ -51,7 +51,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
 }) => {
     if (isJudging && !latestUpdate) {
         return (
-            <div className="p-6 bg-base-300 rounded-lg shadow-inner border border-gray-200 text-center">
+            <div className="p-6 bg-base-300 rounded-lg shadow-inner border border-gray-800 text-center">
                 <span className="loading loading-dots loading-md text-blue-500"></span>
                 <p className="text-blue-600 font-semibold mt-2">
                     Judging your submission...
@@ -80,7 +80,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
             ...latestUpdate.testcases.map((tc) => tc.memory_kb)
         );
         return (
-            <div className="p-6 bg-green-50 rounded-lg shadow-inner border border-green-200 text-green-800">
+            <div className="p-6 bg-green-300 rounded-lg shadow-inner border border-green-200 text-green-800">
                 
                 <div className="flex items-center gap-4">
                     <span className="material-icons text-3xl">

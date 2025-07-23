@@ -11,6 +11,7 @@ import ContestCasesPage from './pages/General/ContestCasesPage';
 import CasePage from './pages/General/CasePage'; // fallback for eager load if needed
 import ContestPage from './pages/General/ContestPage';
 import ClassPage from './pages/General/ClassPage';
+import LeaderboardPage from './pages/General/LeaderboardPage';
 
 // todo: Adjust Unauthorized and Not Found Page
 const UnauthorizedPage: React.FC = () => (
@@ -40,13 +41,46 @@ const App: React.FC = () => {
 
                     <Route element={<ProtectedRoute />}>
                         <Route path="/" element={<DashboardPage />} />
-                        <Route path="/class/:classId" element={<ClassDetailPage />} />
-                        <Route path='/class/:classId/contest/:contestId' element={<ContestCasesPage />} />
+                        <Route
+                            path="/class/:classId"
+                            element={<ClassDetailPage />}
+                        />
+                        <Route
+                            path="/class/:classId/contest/:contestId"
+                            element={<ContestCasesPage />}
+                        />
+                        <Route
+                            path="/class/:classId/contest/:contestId/leaderboard"
+                            element={<LeaderboardPage />}
+                        />
                     </Route>
-                    <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
-                        <Route path="/cases" element={<Suspense fallback={<div>Loading...</div>}><CasePage /></Suspense>} />
-                        <Route path="/contests" element={<Suspense fallback={<div>Loading...</div>}><ContestPage /></Suspense>} />
-                        <Route path="/classes" element={<Suspense fallback={<div>Loading...</div>}><ClassPage /></Suspense>} />
+                    <Route
+                        element={<ProtectedRoute allowedRoles={['Admin']} />}
+                    >
+                        <Route
+                            path="/cases"
+                            element={
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <CasePage />
+                                </Suspense>
+                            }
+                        />
+                        <Route
+                            path="/contests"
+                            element={
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <ContestPage />
+                                </Suspense>
+                            }
+                        />
+                        <Route
+                            path="/classes"
+                            element={
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <ClassPage />
+                                </Suspense>
+                            }
+                        />
                     </Route>
                     <Route
                         path="*"

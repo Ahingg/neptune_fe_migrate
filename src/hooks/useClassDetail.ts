@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getClassByIdApi, getContestsForClassApi } from '../api/class';
+import type { Class, ClassContestAssignment } from '../types/class';
 
 interface UseClassDetailsResult {
     classData: Class | null;
