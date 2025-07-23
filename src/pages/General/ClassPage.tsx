@@ -3,7 +3,6 @@ import { getAllSemestersApi, getCurrentSemesterApi } from '../../api/semester';
 import { getAllClassesBySemesterIdApi, getClassByIdApi } from '../../api/class';
 import type { Semester } from '../../types/semester';
 import type { Class } from '../../types/class';
-import type { UserProfile } from '../../types/auth';
 
 const DEFAULT_COURSE_ID = '09a7b352-1f11-ec11-90f0-d8d385fce79e'; // Algorithm and Programming 1
 

@@ -49,7 +49,7 @@ const ContestCard: React.FC<ContestCardProps> = ({ assignment, status }) => {
     }
 
     // Otherwise, wrap it in a link to the contest detail page
-    return <Link to={`/contest/${assignment.contest_id}`}>{content}</Link>;
+    return <Link to={`/class/${assignment.class_transaction_id}/contest/${assignment.contest_id}`}>{content}</Link>;
 };
 
 export default ContestCard;
