@@ -5,6 +5,7 @@ import LoginPage from './pages/Auth/LoginPage';
 import DashboardPage from './pages/General/DashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import NavbarBottom from './components/NavbarBottom';
+import ClassDetailPage from './pages/General/ClassDetail';
 
 // todo: Adjust Unauthorized and Not Found Page
 const UnauthorizedPage: React.FC = () => (
@@ -34,6 +35,7 @@ const App: React.FC = () => {
 
                     <Route element={<ProtectedRoute />}>
                         <Route path="/" element={<DashboardPage />} />
+                        <Route path="/class/:classId" element={<ClassDetailPage />} />
                     </Route>
                     <Route
                         path="*"

@@ -41,7 +41,7 @@ const NavbarBottom: React.FC = () => {
     return (
         <>
             {/* Lower Section: Navigation and Logout */}
-            <div className="w-full flex justify-between items-center sticky top-0 px-8 bg-blue-50 navbar shadow-lg border-t-1 border-t-blue-500">
+            <div className="w-full flex justify-between items-center sticky top-0 px-8 bg-blue-50 navbar shadow-lg border-t-1 border-t-blue-500 z-20">
                 {/* Bottom Left: Navigation Links */}
                 <nav className="flex gap-2">
                     {visibleNavLinks.map((link) => (

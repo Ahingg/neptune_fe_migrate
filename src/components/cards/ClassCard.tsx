@@ -21,7 +21,7 @@ const ClassCard: React.FC<ClassCardProps> = ({ enrollment }) => {
             </p>
             <div className="flex gap-2 mt-4">
                 <Link
-                    to={`/submission?class=${enrollment.class_transaction_id}`}
+                    to={`/class/${enrollment.class_transaction_id}`}
                     className="btn btn-primary btn-md flex-1 text-lg"
                 >
                     View All Contests
