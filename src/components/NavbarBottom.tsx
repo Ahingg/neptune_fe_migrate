@@ -7,13 +7,14 @@ import { NavLink } from "react-router-dom";
 type NavLinkInfo = {
     to: string;
     label: string;
-    roles?: Array<'admin' | 'student'>;
+    roles?: Array<'admin' | 'student' | 'lecturer' | 'assistant'>;
 };
 const allNavLinks: NavLinkInfo[] = [
-    { to: '/', label: 'Dashboard', roles: ['admin', 'student'] },
+    { to: '/', label: 'Dashboard', roles: ['admin', 'student', 'lecturer', 'assistant'] },
     { to: '/contests', label: 'Contests', roles: ['admin', 'student'] },
     { to: '/cases', label: 'Cases', roles: ['admin'] },
     { to: '/classes', label: 'Classes', roles: ['admin'] },
+    { to: '/lecturer/dashboard', label: 'My Classes', roles: ['lecturer', 'assistant'] },
     { to: '/submission', label: 'Submission', roles: ['student'] },
     { to: '/leaderboard', label: 'Leaderboard', roles: ['student', 'admin'] },
 ];

@@ -10,6 +10,8 @@ import ClassDetailPage from './pages/General/ClassDetail';
 import CasePage from './pages/General/CasePage'; // fallback for eager load if needed
 import ContestPage from './pages/General/ContestPage';
 import ClassPage from './pages/General/ClassPage';
+import LecturerDashboardPage from './pages/Lecturer/LecturerDashboardPage';
+import LecturerClassPage from './pages/Lecturer/LecturerClassPage';
 
 // todo: Adjust Unauthorized and Not Found Page
 const UnauthorizedPage: React.FC = () => (
@@ -45,6 +47,10 @@ const App: React.FC = () => {
                         <Route path="/cases" element={<Suspense fallback={<div>Loading...</div>}><CasePage /></Suspense>} />
                         <Route path="/contests" element={<Suspense fallback={<div>Loading...</div>}><ContestPage /></Suspense>} />
                         <Route path="/classes" element={<Suspense fallback={<div>Loading...</div>}><ClassPage /></Suspense>} />
+                    </Route>
+                    <Route element={<ProtectedRoute allowedRoles={['Lecturer', 'Assistant']} />}>
+                        <Route path="/lecturer/dashboard" element={<LecturerDashboardPage />} />
+                        <Route path="/lecturer/class/:classId" element={<LecturerClassPage />} />
                     </Route>
                     <Route
                         path="*"
