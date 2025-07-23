@@ -15,16 +15,16 @@ const QuickActions: React.FC = () => {
                     description="View and participate in contests"
                 />
                 <ActionCard
-                    to="/submission"
-                    icon="upload"
-                    title="Submit Code"
-                    description="Submit to practice problems"
+                    to="/cases"
+                    icon="description"
+                    title="Cases"
+                    description="Manage and view all cases"
                 />
                 <ActionCard
-                    to="/leaderboard"
-                    icon="leaderboard"
-                    title="Leaderboard"
-                    description="View overall rankings"
+                    to="/classes"
+                    icon="class"
+                    title="Classes"
+                    description="Manage and view all classes"
                 />
             </div>
         </div>

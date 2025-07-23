@@ -1,4 +1,5 @@
 
+import React, { Suspense } from 'react';
 import { Route, BrowserRouter, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/Auth/LoginPage';
@@ -6,6 +7,9 @@ import DashboardPage from './pages/General/DashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import NavbarBottom from './components/NavbarBottom';
 import ClassDetailPage from './pages/General/ClassDetail';
+import CasePage from './pages/General/CasePage'; // fallback for eager load if needed
+import ContestPage from './pages/General/ContestPage';
+import ClassPage from './pages/General/ClassPage';
 
 // todo: Adjust Unauthorized and Not Found Page
 const UnauthorizedPage: React.FC = () => (
@@ -36,6 +40,9 @@ const App: React.FC = () => {
                     <Route element={<ProtectedRoute />}>
                         <Route path="/" element={<DashboardPage />} />
                         <Route path="/class/:classId" element={<ClassDetailPage />} />
+                        <Route path="/cases" element={<Suspense fallback={<div>Loading...</div>}><CasePage /></Suspense>} />
+                        <Route path="/contests" element={<Suspense fallback={<div>Loading...</div>}><ContestPage /></Suspense>} />
+                        <Route path="/classes" element={<Suspense fallback={<div>Loading...</div>}><ClassPage /></Suspense>} />
                     </Route>
                     <Route
                         path="*"
@@ -51,7 +58,7 @@ const App: React.FC = () => {
     );
 };
 
-const AppWrapper: React.FC = () =>(
+const AppWrapper: React.FC = () => (
     <BrowserRouter>
         <App />
     </BrowserRouter>
