@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createCasePdfFileUrl } from '../../utils/urlMaker';
+import type { Case } from '../../types/case';
 
 interface CaseDisplayProps {
     selectedCase: Case | null;
