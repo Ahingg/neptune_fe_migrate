@@ -5,9 +5,11 @@ import type { Class, ClassContestAssignment } from "../types/class";
  * Fetches details of a specific class, including its students and contests.
  * @param classId The ID of the class.
  */
-export const getClassByIdApi = async (classId: string): Promise<Class> => {
-  const response = await axiosClient.get<Class>(`/api/class-detail?class_transaction_id=${classId}`);
-  return response.data;
+export const getClassByIdApi = async (classId: string) => {
+  const res = await axiosClient.get(
+    `/api/class-detail?class_transaction_id=${classId}`
+  );
+  return res.data;
 };
 
 /**
@@ -31,17 +33,5 @@ export const getAllClassesBySemesterIdApi = async (
   let url = `/api/classes?semester_id=${semesterId}`;
   if (courseId) url += `&course_id=${courseId}`;
   const response = await axiosClient.get<Class[]>(url);
-  return response.data;
-};
-
-/**
- * Fetches all class contest assignments (class contests) for admin.
- */
-export const getAllClassContestsApi = async (): Promise<
-  ClassContestAssignment[]
-> => {
-  const response = await axiosClient.get<ClassContestAssignment[]>(
-    "/api/class-contests"
-  );
   return response.data;
 };

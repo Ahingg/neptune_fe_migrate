@@ -6,11 +6,13 @@ import type { Class } from '../../types/class';
 import type { ClassContestAssignment } from '../../types/class';
 import type { Case } from '../../types/case';
 import { createCasePdfFileUrl } from '../../utils/urlMaker';
+import { useNavigate } from 'react-router-dom';
 
 const LecturerContestsPage: React.FC = () => {
     const { classes, loading: classesLoading, error: classesError } = useLecturerClasses();
     const [selectedClassId, setSelectedClassId] = useState<string | undefined>(undefined);
     const [selectedContestId, setSelectedContestId] = useState<string | undefined>(undefined);
+    const navigate = useNavigate();
 
     // Set default class on load
     useEffect(() => {
@@ -36,10 +38,10 @@ const LecturerContestsPage: React.FC = () => {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="flex flex-col lg:flex-row gap-8 h-[900px]">
+            <div className="flex flex-col lg:flex-row gap-8 h-[800px]">
                 {/* Left Box: Class dropdown and contest list */}
-                <div className="lg:w-1/2 w-full bg-blue-50 rounded-xl shadow p-6 h-full flex flex-col">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">My Assistant Contests</h2>
+                <div className="lg:w-1/2 w-full bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 rounded-2xl shadow-lg p-6 h-full flex flex-col border border-blue-100">
+                    <h2 className="text-2xl font-extrabold text-blue-700 mb-4 drop-shadow">My Assistant Contests</h2>
                     {/* Class Dropdown */}
                     {classesLoading ? (
                         <div className="text-gray-800">Loading classes...</div>
@@ -47,9 +49,9 @@ const LecturerContestsPage: React.FC = () => {
                         <div className="text-red-600 bg-red-50 p-3 rounded-lg">{classesError}</div>
                     ) : (
                         <>
-                            <label className="block mb-2 text-gray-800">Select Class:</label>
+                            <label className="block mb-2 text-blue-700 font-semibold">Select Class:</label>
                             <select
-                                className="select select-bordered w-full mb-4 text-white bg-blue-700"
+                                className="select select-bordered w-full mb-4 text-blue-800 bg-white border-blue-200"
                                 value={selectedClassId}
                                 onChange={e => {
                                     setSelectedClassId(e.target.value);
@@ -57,12 +59,12 @@ const LecturerContestsPage: React.FC = () => {
                                 }}
                             >
                                 {classes.map(cls => (
-                                    <option key={cls.class_transaction_id} value={cls.class_transaction_id} className="text-white bg-blue-700">
+                                    <option key={cls.class_transaction_id} value={cls.class_transaction_id} className="text-blue-800 bg-white">
                                         {cls.class_code} - {cls.class_name || 'No name'}
                                     </option>
                                 ))}
                             </select>
-                            <div className="mb-2 text-gray-800 font-semibold">Contest List:</div>
+                            <div className="mb-2 text-blue-700 font-semibold">Contest List:</div>
                             <div className="flex-1 min-h-0 overflow-y-auto">
                                 {contestsLoading ? (
                                     <div className="text-gray-800">Loading contests...</div>
@@ -76,9 +78,9 @@ const LecturerContestsPage: React.FC = () => {
                                             <li key={contest.contest_id}>
                                                 <button
                                                     onClick={() => setSelectedContestId(contest.contest_id)}
-                                                    className={`w-full text-left p-3 rounded-lg transition-colors ${selectedContestId === contest.contest_id
+                                                    className={`w-full text-left p-3 rounded-lg transition-colors font-semibold border border-blue-200 shadow ${selectedContestId === contest.contest_id
                                                         ? 'bg-blue-600 text-white'
-                                                        : 'bg-white hover:bg-blue-100 text-gray-800'
+                                                        : 'bg-white hover:bg-blue-100 text-blue-800'
                                                         }`}
                                                 >
                                                     <div className="font-semibold">{contest.contest?.name || 'No name'}</div>
@@ -93,13 +95,13 @@ const LecturerContestsPage: React.FC = () => {
                     )}
                 </div>
                 {/* Right Box: Contest detail and case list */}
-                <div className="lg:w-1/2 w-full bg-white rounded-xl shadow p-6 h-full flex flex-col">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">Contest Details</h2>
+                <div className="lg:w-1/2 w-full bg-white rounded-2xl shadow-lg p-6 h-full flex flex-col border border-blue-100">
+                    <h2 className="text-2xl font-extrabold text-blue-700 mb-4 drop-shadow">Contest Details</h2>
                     <div className="flex-1 min-h-0 overflow-y-auto">
                         {selectedContest ? (
                             <div className="space-y-4">
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-800">{selectedContest.contest?.name || 'No name'}</h3>
+                                    <h3 className="text-lg font-semibold text-blue-700">{selectedContest.contest?.name || 'No name'}</h3>
                                     <div className="text-gray-800">{selectedContest.contest?.description || 'No description'}</div>
                                 </div>
                                 <div className="text-gray-800">
@@ -108,7 +110,7 @@ const LecturerContestsPage: React.FC = () => {
                                 <div className="text-gray-800">
                                     <b>End Time:</b> {selectedContest.end_time ? new Date(selectedContest.end_time).toLocaleString() : 'N/A'}
                                 </div>
-                                <div className="text-gray-800 font-semibold mt-4">Problems:</div>
+                                <div className="text-blue-700 font-semibold mt-4">Problems:</div>
                                 {casesLoading ? (
                                     <div className="text-gray-800">Loading problems...</div>
                                 ) : casesError ? (
@@ -122,7 +124,7 @@ const LecturerContestsPage: React.FC = () => {
                                                 <a
                                                     href={createCasePdfFileUrl(problem.pdf_file_url)}
                                                     download
-                                                    className="block p-3 rounded-lg bg-gray-100 hover:bg-blue-100 text-blue-800 transition-colors"
+                                                    className="block p-3 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 font-semibold border border-blue-200 shadow transition-colors"
                                                 >
                                                     {problem.name || 'Untitled Problem'}
                                                 </a>
@@ -130,6 +132,20 @@ const LecturerContestsPage: React.FC = () => {
                                         ))}
                                     </ul>
                                 )}
+                                {/* Add button below problems list */}
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        className="px-6 py-2 bg-blue-700 text-white rounded-lg font-bold hover:bg-blue-800 transition-colors shadow"
+                                        onClick={() => {
+                                            if (selectedClassId && selectedContestId) {
+                                                navigate(`/lecturer/submission-detail?classId=${selectedClassId}&contestId=${selectedContestId}`);
+                                            }
+                                        }}
+                                        disabled={!selectedClassId || !selectedContestId}
+                                    >
+                                        View Submission Details
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             <div className="text-gray-400 text-center mt-8">Select a contest to view details</div>

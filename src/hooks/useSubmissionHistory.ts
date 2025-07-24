@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import { useAtom } from 'jotai';
-import { submissionHistoryCacheAtom } from '../store/submission';
-import type { SubmissionHistoryItem } from '../types/submission';
-import { getSubmissionsForContestApi } from '../api/submission';
-
+import { useState, useEffect } from "react";
+import { useAtom } from "jotai";
+import { submissionHistoryCacheAtom } from "../store/submission";
+import type { SubmissionHistoryItem } from "../types/submission";
+import { getSubmissionsForContestApi } from "../api/submission";
 interface UseSubmissionHistoryResult {
   submissions: SubmissionHistoryItem[];
   loading: boolean;

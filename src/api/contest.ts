@@ -85,11 +85,9 @@ export const getClassAssignmentsForContest = async (
   return response.data.class_contests || [];
 };
 
-export const getCasesForContestApi = async (
-  contestId: string
-): Promise<Case[]> => {
-  const res = await axiosClient.get(`/api/contest/${contestId}/cases`);
-  return res.data;
+export const getCasesForContestApi = async (contestId: string) => {
+  const response = await axiosClient.get(`/api/contests/${contestId}`);
+  return response.data.cases || [];
 };
 
 /**

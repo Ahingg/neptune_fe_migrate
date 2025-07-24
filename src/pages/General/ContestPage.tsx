@@ -4,6 +4,13 @@ import type { Contest } from '../../types/contest';
 import ContestFormModal from '../../components/contest/ContestFormModal';
 import * as contestApi from '../../api/contest';
 import type { ClassContestAssignment } from '../../types/class';
+import { useClasses } from '../../hooks/useClasses';
+import useClassContests from '../../hooks/useClassContests';
+import { useContestDetails } from '../../hooks/useContestDetail';
+import { createCasePdfFileUrl } from '../../utils/urlMaker';
+import type { Case } from '../../types/case';
+import type { Class } from '../../types/class';
+import { useNavigate } from 'react-router-dom';
 
 // function getStatus(start: Date, end: Date): string {
 //     const now = new Date();
@@ -33,6 +40,7 @@ function toISOStringWithTZ(local: string) {
 }
 
 const ContestPage: React.FC = () => {
+    // Admin contest management hooks
     const { contests, loading, error, deleteContest, fetchContests } = useContests();
     const [showModal, setShowModal] = useState(false);
     const [editContest, setEditContest] = useState<Contest | null>(null);
@@ -40,24 +48,48 @@ const ContestPage: React.FC = () => {
     const [modalLoading, setModalLoading] = useState(false);
     const [assignmentsLoading, setAssignmentsLoading] = useState(false);
 
-    // Fetch class assignments for each contest after contests are loaded
+    // Admin class/contest/case view state
+    const {
+        classes,
+        loading: classesLoading,
+        error: classesError,
+        courseOptions,
+        courseId,
+        setClasses,
+        fetchClasses,
+    } = useClasses();
+    const [selectedCourseId, setSelectedCourseId] = useState<string>(courseId);
+    const [selectedClassId, setSelectedClassId] = useState<string | undefined>(undefined);
+    const [selectedContestId, setSelectedContestId] = useState<string | undefined>(undefined);
+
+    // Update classes when course changes
     useEffect(() => {
-        const fetchAssignments = async () => {
-            setAssignmentsLoading(true);
-            const map: Record<string, ClassContestAssignment[]> = {};
-            await Promise.all(
-                contests.map(async (c) => {
-                    try {
-                        map[c.id] = await contestApi.getClassAssignmentsForContest(c.id);
-                    } catch {
-                        map[c.id] = [];
-                    }
-                })
-            );
-            setAssignmentsLoading(false);
-        };
-        if (contests.length > 0) fetchAssignments();
-    }, [contests]);
+        fetchClasses();
+    }, [selectedCourseId]);
+
+    // Set default class on load or when classes change
+    useEffect(() => {
+        if (classes.length > 0 && !selectedClassId) {
+            setSelectedClassId(classes[0].class_transaction_id);
+        }
+    }, [classes, selectedClassId]);
+
+    // Fetch contests for selected class
+    const { contests: classContests, loading: contestsLoading, error: contestsError } = useClassContests(selectedClassId);
+
+    // Set default contest on load or when contests change
+    useEffect(() => {
+        if (classContests.length > 0 && !selectedContestId) {
+            setSelectedContestId(classContests[0].contest_id);
+        }
+    }, [classContests, selectedContestId]);
+
+    // Fetch cases for selected contest
+    const { cases, loading: casesLoading, error: casesError } = useContestDetails(selectedContestId);
+
+    const selectedContest: ClassContestAssignment | undefined = classContests.find(c => c.contest_id === selectedContestId);
+
+    const navigate = useNavigate();
 
     const handleAdd = () => {
         setEditContest(null);
@@ -133,20 +165,21 @@ const ContestPage: React.FC = () => {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="bg-white rounded-xl shadow p-6">
+            {/* Admin contest management UI */}
+            <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 rounded-2xl shadow-2xl p-8 border border-blue-100 mb-8">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">Contests</h1>
+                    <h1 className="text-3xl font-extrabold text-blue-700 drop-shadow">Contests</h1>
                     <div className="flex gap-2">
-                        <button className="btn btn-outline btn-neutral text-gray-800 border-gray-700 hover:bg-gray-800 hover:text-white" onClick={handleAdd}>+ Add New Contest</button>
+                        <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow border-none hover:bg-blue-700 transition-colors" onClick={handleAdd}>+ Add New Contest</button>
                     </div>
                 </div>
                 {feedback && <div className="mb-2 text-green-700">{feedback}</div>}
                 {(loading || assignmentsLoading) && <div className="text-gray-800">Loading...</div>}
                 {error && <div className="text-red-700">{error}</div>}
                 <div className="overflow-x-auto">
-                    <table className="table w-full text-gray-800">
+                    <table className="table w-full text-blue-900">
                         <thead>
-                            <tr className="bg-gray-200 text-gray-900">
+                            <tr className="bg-blue-50 text-blue-700">
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Actions</th>
@@ -154,17 +187,149 @@ const ContestPage: React.FC = () => {
                         </thead>
                         <tbody>
                             {contests.map((c: any) => (
-                                <tr key={c.id} className="hover:bg-gray-100">
-                                    <td>{c.name}</td>
+                                <tr key={c.id} className="hover:bg-blue-100 transition-colors">
+                                    <td className="font-bold text-blue-800">{c.name}</td>
                                     <td>{c.description}</td>
                                     <td>
-                                        <button className="btn btn-sm btn-neutral text-white border-gray-700 hover:bg-gray-800 hover:text-white mr-2" onClick={() => handleEdit(c)}>Edit</button>
-                                        <button className="btn btn-sm btn-outline btn-error text-gray-800 border-gray-700 hover:bg-red-800 hover:text-white" onClick={() => handleDelete(c.id)}>Delete</button>
+                                        <button className="btn btn-sm bg-blue-600 text-white font-semibold rounded-lg px-3 py-1 shadow border-none hover:bg-blue-700 transition-colors mr-2" onClick={() => handleEdit(c)}>Edit</button>
+                                        <button className="btn btn-sm bg-red-600 text-white font-semibold rounded-lg px-3 py-1 shadow border-none hover:bg-red-700 transition-colors" onClick={() => handleDelete(c.id)}>Delete</button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                </div>
+            </div>
+            {/* Admin class/contest/case view */}
+            <div className="flex flex-col lg:flex-row gap-8 h-[800px]">
+                {/* Left Box: Course & Class dropdown and contest list */}
+                <div className="lg:w-1/2 w-full bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 rounded-2xl shadow-lg p-6 h-full flex flex-col border border-blue-100">
+                    <h2 className="text-2xl font-extrabold text-blue-700 mb-4 drop-shadow">Class & Contest Browser</h2>
+                    {/* Course Dropdown */}
+                    <label className="block mb-2 text-blue-700 font-semibold">Select Course:</label>
+                    <select
+                        className="select select-bordered w-full mb-4 text-blue-800 bg-white border-blue-200"
+                        value={selectedCourseId}
+                        onChange={e => {
+                            setSelectedCourseId(e.target.value);
+                            setSelectedClassId(undefined); // reset class selection
+                            setSelectedContestId(undefined); // reset contest selection
+                        }}
+                    >
+                        {courseOptions.map((opt: { id: string; name: string }) => (
+                            <option key={opt.id} value={opt.id} className="text-blue-800 bg-white">
+                                {opt.name}
+                            </option>
+                        ))}
+                    </select>
+                    {/* Class Dropdown */}
+                    {classesLoading ? (
+                        <div className="text-gray-800">Loading classes...</div>
+                    ) : classesError ? (
+                        <div className="text-red-600 bg-red-50 p-3 rounded-lg">{classesError}</div>
+                    ) : (
+                        <>
+                            <label className="block mb-2 text-blue-700 font-semibold">Select Class:</label>
+                            <select
+                                className="select select-bordered w-full mb-4 text-blue-800 bg-white border-blue-200"
+                                value={selectedClassId}
+                                onChange={e => {
+                                    setSelectedClassId(e.target.value);
+                                    setSelectedContestId(undefined); // reset contest selection
+                                }}
+                            >
+                                {classes.map((cls: Class) => (
+                                    <option key={cls.class_transaction_id} value={cls.class_transaction_id} className="text-blue-800 bg-white">
+                                        {cls.class_code} - {cls.class_name || 'No name'}
+                                    </option>
+                                ))}
+                            </select>
+                            <div className="mb-2 text-blue-700 font-semibold">Contest List:</div>
+                            <div className="flex-1 min-h-0 overflow-y-auto">
+                                {contestsLoading ? (
+                                    <div className="text-gray-800">Loading contests...</div>
+                                ) : contestsError ? (
+                                    <div className="text-red-600 bg-red-50 p-3 rounded-lg">{contestsError}</div>
+                                ) : classContests.length === 0 ? (
+                                    <div className="text-gray-400">No contests found for this class.</div>
+                                ) : (
+                                    <ul className="space-y-2">
+                                        {classContests.map(contest => (
+                                            <li key={contest.contest_id}>
+                                                <button
+                                                    onClick={() => setSelectedContestId(contest.contest_id)}
+                                                    className={`w-full text-left p-3 rounded-lg transition-colors font-semibold border border-blue-200 shadow ${selectedContestId === contest.contest_id
+                                                        ? 'bg-blue-600 text-white'
+                                                        : 'bg-white hover:bg-blue-100 text-blue-800'
+                                                        }`}
+                                                >
+                                                    <div className="font-semibold">{contest.contest?.name || 'No name'}</div>
+                                                    <div className="text-sm opacity-75">{contest.contest?.description || 'No description'}</div>
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </>
+                    )}
+                </div>
+                {/* Right Box: Contest detail and case list */}
+                <div className="lg:w-1/2 w-full bg-white rounded-2xl shadow-lg p-6 h-full flex flex-col border border-blue-100">
+                    <h2 className="text-2xl font-extrabold text-blue-700 mb-4 drop-shadow">Contest Details</h2>
+                    <div className="flex-1 min-h-0 overflow-y-auto">
+                        {selectedContest ? (
+                            <div className="space-y-4">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-blue-700">{selectedContest.contest?.name || 'No name'}</h3>
+                                    <div className="text-gray-800">{selectedContest.contest?.description || 'No description'}</div>
+                                </div>
+                                <div className="text-gray-800">
+                                    <b>Start Time:</b> {selectedContest.start_time ? new Date(selectedContest.start_time).toLocaleString() : 'N/A'}
+                                </div>
+                                <div className="text-gray-800">
+                                    <b>End Time:</b> {selectedContest.end_time ? new Date(selectedContest.end_time).toLocaleString() : 'N/A'}
+                                </div>
+                                <div className="text-blue-700 font-semibold mt-4">Problems:</div>
+                                {casesLoading ? (
+                                    <div className="text-gray-800">Loading problems...</div>
+                                ) : casesError ? (
+                                    <div className="text-red-600 bg-red-50 p-3 rounded-lg">{casesError}</div>
+                                ) : cases.length === 0 ? (
+                                    <div className="text-gray-400">No problems found for this contest.</div>
+                                ) : (
+                                    <ul className="space-y-2">
+                                        {cases.map(problem => (
+                                            <li key={problem.case_id}>
+                                                <a
+                                                    href={createCasePdfFileUrl(problem.pdf_file_url)}
+                                                    download
+                                                    className="block p-3 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 font-semibold border border-blue-200 shadow transition-colors"
+                                                >
+                                                    {problem.name || 'Untitled Problem'}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        className="px-6 py-2 bg-blue-700 text-white rounded-lg font-bold hover:bg-blue-800 transition-colors shadow"
+                                        onClick={() => {
+                                            if (selectedClassId && selectedContestId) {
+                                                navigate(`/general/admin-submission-detail?classId=${selectedClassId}&contestId=${selectedContestId}`);
+                                            }
+                                        }}
+                                        disabled={!selectedClassId || !selectedContestId}
+                                    >
+                                        View Submission Details
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="text-gray-400 text-center mt-8">Select a contest to view details</div>
+                        )}
+                    </div>
                 </div>
             </div>
             <ContestFormModal

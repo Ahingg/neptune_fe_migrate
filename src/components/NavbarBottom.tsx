@@ -17,6 +17,8 @@ const allNavLinks: NavLinkInfo[] = [
     { to: '/lecturer/dashboard', label: 'Dashboard', roles: ['Lecturer', 'Assistant'] },
     { to: '/lecturer/classes', label: 'Classes', roles: ['Lecturer', 'Assistant'] },
     { to: '/lecturer/contests', label: 'Contests', roles: ['Lecturer', 'Assistant'] },
+    { to: '/lecturer/submissions', label: 'Submissions', roles: ['Lecturer', 'Assistant'] },
+    { to: '/lecturer/leaderboard', label: 'Leaderboard', roles: ['Lecturer', 'Assistant'] },
     { to: '/submission', label: 'Submission', roles: ['student'] },
     { to: '/leaderboard', label: 'Leaderboard', roles: ['student', 'admin'] },
 ];
