@@ -56,6 +56,14 @@ const App: React.FC = () => {
                             path="/class/:classId/contest/:contestId/leaderboard"
                             element={<LeaderboardPage />}
                         />
+                        <Route
+                            path="/contest/global/:contestId"
+                            element={<ContestCasesPage />}
+                        />
+                        <Route
+                            path="/contest/:contestId/leaderboard"
+                            element={<LeaderboardPage />}
+                        />
                     </Route>
                     <Route
                         element={<ProtectedRoute allowedRoles={['Admin']} />}
@@ -85,10 +93,25 @@ const App: React.FC = () => {
                             }
                         />
                     </Route>
-                    <Route element={<ProtectedRoute allowedRoles={['Lecturer', 'Assistant']} />}>
-                        <Route path="/lecturer/dashboard" element={<LecturerDashboardPage />} />
-                        <Route path="/lecturer/classes" element={<LecturerClassesPage />} />
-                        <Route path="/lecturer/contests" element={<LecturerContestsPage />} />
+                    <Route
+                        element={
+                            <ProtectedRoute
+                                allowedRoles={['Lecturer', 'Assistant']}
+                            />
+                        }
+                    >
+                        <Route
+                            path="/lecturer/dashboard"
+                            element={<LecturerDashboardPage />}
+                        />
+                        <Route
+                            path="/lecturer/classes"
+                            element={<LecturerClassesPage />}
+                        />
+                        <Route
+                            path="/lecturer/contests"
+                            element={<LecturerContestsPage />}
+                        />
                     </Route>
                     <Route
                         path="*"

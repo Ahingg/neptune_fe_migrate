@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import type { UserEnrollmentDetail } from '../../types/auth';
 
 interface ClassCardProps {
     enrollment: UserEnrollmentDetail;
@@ -7,7 +8,7 @@ interface ClassCardProps {
 
 const ClassCard: React.FC<ClassCardProps> = ({ enrollment }) => {
     return (
-        <div className="card bg-white border border-blue-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-xl p-6">
+        <div className="card bg-base-200 border border-gray-500 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-xl p-6">
             <div className="flex items-start justify-between mb-3">
                 <span className="material-icons text-blue-500 text-4xl">
                     class

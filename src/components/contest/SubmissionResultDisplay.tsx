@@ -74,7 +74,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
     }
 
     // Special summary view for "Accepted"
-    if (latestUpdate.final_status === 'Accepted') {
+    if (latestUpdate.status === 'Accepted') {
         const avgTime = (
             latestUpdate.testcases.reduce((acc, tc) => acc + tc.time_ms, 0) /
             latestUpdate.testcases.length
@@ -110,13 +110,13 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
         <div className="p-6 rounded-lg shadow-inner border border-gray-600">
             <div
                 className={`p-3 rounded-lg bg-base-300 font-bold text-lg text-center mb-4 ${getStatusColor(
-                    latestUpdate.final_status
+                    latestUpdate.status
                 )}`}
             >
-                Overall Status: {latestUpdate.final_status}
+                Overall Status: {latestUpdate.status}
             </div>
 
-            {latestUpdate.final_status === 'Compile Error' &&
+            {latestUpdate.status === 'Compile Error' &&
                 latestUpdate.testcases[0]?.stderr && (
                     <div className="mb-4">
                         <h3 className="font-semibold text-blue-700">

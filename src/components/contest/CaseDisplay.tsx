@@ -27,8 +27,6 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({
             </div>
         );
     }
-
-    console.log(selectedCase)
     return (
         <div className="bg-base-300 rounded-lg shadow-inner border border-gray-600 h-full">
             <div className="p-6 border-b border-gray-500/20">
