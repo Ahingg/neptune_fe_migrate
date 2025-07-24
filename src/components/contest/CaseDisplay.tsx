@@ -27,7 +27,6 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({
             </div>
         );
     }
-
     return (
         <div className="bg-base-300 rounded-lg shadow-inner border border-gray-600 h-full">
             <div className="p-6 border-b border-gray-500/20">
@@ -66,7 +65,7 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({
             <div className="p-6">
                 {activeTab === 'description' && (
                     <div>
-                        <p className="text-sm text-gray-700 mb-4 whitespace-pre-wrap">
+                        <p className="text-sm text-blue-700 mb-4 whitespace-pre-wrap">
                             {selectedCase.description}
                         </p>
                         <div className="flex flex-wrap gap-2 my-4">

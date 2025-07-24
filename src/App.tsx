@@ -65,6 +65,14 @@ const App: React.FC = () => {
                             path="/leaderboard"
                             element={<AdminLeaderboardPage />}
                         />
+                        <Route
+                            path="/contest/global/:contestId"
+                            element={<ContestCasesPage />}
+                        />
+                        <Route
+                            path="/contest/:contestId/leaderboard"
+                            element={<LeaderboardPage />}
+                        />
                     </Route>
                     <Route
                         element={<ProtectedRoute allowedRoles={['Admin']} />}

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useAtomValue } from 'jotai';
+import { leaderboardRefreshTriggerAtom } from '../store/leaderboard';
 import type { LeaderboardData } from '../types/leaderboard';
 import { getLeaderboard } from '../api/leaderboard';
 interface UseLeaderboardDataResult {
@@ -9,6 +11,7 @@ interface UseLeaderboardDataResult {
 
 /**
  * Fetches and manages state for contest leaderboard data.
+ * This hook is now reactive to a global refresh trigger.
  * @param contestId The ID of the contest.
  * @param classTransactionId Optional ID for class-specific leaderboards.
  */
@@ -20,6 +23,9 @@ export const useLeaderboardData = (
         useState<LeaderboardData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Listen to the refresh trigger atom.
+    const refreshTrigger = useAtomValue(leaderboardRefreshTriggerAtom);
 
     useEffect(() => {
         if (!contestId) {
@@ -46,7 +52,7 @@ export const useLeaderboardData = (
         };
 
         fetchLeaderboard();
-    }, [contestId, classTransactionId]);
+    }, [contestId, classTransactionId, refreshTrigger]); // Add refreshTrigger to dependency array
 
     return { leaderboardData, loading, error };
 };
