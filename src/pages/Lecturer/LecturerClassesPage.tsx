@@ -65,7 +65,7 @@ const LecturerClassesPage: React.FC = () => {
 
                 // Filter for classes where user is an assistant
                 const filtered = details.filter(cls => {
-                    const isAssistant = (cls.assistants || []).some(a => a.UserID === userId);
+                    const isAssistant = (cls.assistants || []).some((a: any) => a.user_id === userId);
                     if (isAssistant) {
                         console.log(`User is assistant for class: ${cls.class_code}`);
                     }
@@ -192,9 +192,9 @@ const ClassDetailContent: React.FC<{ selectedClass: Class }> = ({ selectedClass 
                         <div className="text-blue-700 font-semibold mb-1">Assistants <span className="text-xs text-gray-500">({(selectedClass.assistants || []).length})</span></div>
                         <div className="bg-blue-50 rounded-xl p-3 mb-4 shadow-inner">
                             <ul className="space-y-1">
-                                {(selectedClass.assistants || []).map(assistant => (
-                                    <li key={assistant.UserID} className="text-gray-800">
-                                        {assistant.User.Name} ({assistant.User.Username})
+                                {(selectedClass.assistants || []).map((assistant: any) => (
+                                    <li key={assistant.user_id || assistant.UserID} className="text-gray-800">
+                                        {(assistant.name || (assistant.User && assistant.User.Name))} ({assistant.username || (assistant.User && assistant.User.Username)})
                                     </li>
                                 ))}
                             </ul>
