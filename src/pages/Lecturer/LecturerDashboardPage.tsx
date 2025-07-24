@@ -41,16 +41,7 @@ const LecturerDashboardPage: React.FC = () => {
                                     <span className="material-icons text-blue-500">class</span>
                                     <span className="text-lg font-bold text-blue-700">{cls.class_code}</span>
                                 </div>
-                                {/* Assistants List */}
-                                {Array.isArray(cls.assistants) && cls.assistants.length > 0 && (
-                                    <div className="text-sm text-blue-700 mb-2">
-                                        Assistant: {(cls.assistants ?? []).map((assistant: any, idx: number) => (
-                                            <span key={assistant.user_id || assistant.UserID}>
-                                                {(assistant.name || (assistant.User && assistant.User.Name))} ({assistant.username || (assistant.User && assistant.User.Username)}){idx < (cls.assistants?.length ?? 0) - 1 ? ', ' : ''}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
+                                {/* <div className="text-gray-700 mb-1">{cls.class_name || 'No name'}</div> */}
                                 <button
                                     className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                                     onClick={() => navigate('/lecturer/classes')}
