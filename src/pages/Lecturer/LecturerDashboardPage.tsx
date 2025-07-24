@@ -16,9 +16,9 @@ const LecturerDashboardPage: React.FC = () => {
         <div className="container mx-auto p-6">
             <div className="flex flex-col lg:flex-row gap-8 max-w-screen-2xl mx-auto">
                 {/* Main Box */}
-                <div className="bg-white rounded-xl shadow p-6 flex-1">
+                <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 rounded-2xl shadow-2xl p-8 flex-1 border border-blue-100">
                     {/* Welcome Message */}
-                    <div className="bg-blue-50 shadow-2xl rounded-2xl p-0 border border-blue-100 w-full mb-6">
+                    <div className="bg-white/90 shadow-xl rounded-2xl p-0 border border-blue-100 w-full mb-8">
                         <div className="p-8 border-b border-blue-200/60">
                             <h1 className="text-4xl font-extrabold text-blue-700 mb-2 drop-shadow">
                                 Welcome, {user?.name || 'Lecturer'}
@@ -31,18 +31,24 @@ const LecturerDashboardPage: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">My Assistant Classes (Current Semester)</h2>
+                    <h2 className="text-2xl font-bold text-blue-700 mb-4 drop-shadow">My Assistant Classes (Current Semester)</h2>
                     {loading && <div className="text-gray-800">Loading...</div>}
                     {error && <div className="text-red-700 text-gray-800">{error}</div>}
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {classes.map(cls => (
-                            <ActionCard
-                                key={cls.class_transaction_id}
-                                to="/lecturer/classes"
-                                icon="class"
-                                title={cls.class_code}
-                                description={cls.class_name || 'No name'}
-                            />
+                            <div key={cls.class_transaction_id} className="bg-white rounded-xl shadow-md border border-blue-100 p-6 flex flex-col items-start hover:shadow-lg transition-shadow">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="material-icons text-blue-500">class</span>
+                                    <span className="text-lg font-bold text-blue-700">{cls.class_code}</span>
+                                </div>
+                                {/* <div className="text-gray-700 mb-1">{cls.class_name || 'No name'}</div> */}
+                                <button
+                                    className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                                    onClick={() => navigate('/lecturer/classes')}
+                                >
+                                    View Details
+                                </button>
+                            </div>
                         ))}
                         {(!loading && classes.length === 0) && (
                             <div className="text-gray-400">You are not an assistant in any class this semester.</div>
@@ -57,19 +63,19 @@ const LecturerDashboardPage: React.FC = () => {
                             to="/lecturer/classes"
                             icon="class"
                             title="Classes"
-                            description="View your assigned classes"
+                            description="View your assigned classes as an assistant"
                         />
                         <ActionCard
                             to="/lecturer/contests"
                             icon="emoji_events"
                             title="Contests"
-                            description="View contests for your classes"
+                            description="View contests for your classes as an assistant"
                         />
                         <ActionCard
-                            to="/submission"
+                            to="/lecturer/submissions"
                             icon="assignment_turned_in"
-                            title="Submission"
-                            description="View and manage submissions"
+                            title="Submissions"
+                            description="View and manage submissions for your classes as an assistant"
                         />
                     </div>
                 </aside>

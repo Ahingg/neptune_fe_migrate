@@ -14,6 +14,8 @@ import ClassPage from './pages/General/ClassPage';
 import LecturerDashboardPage from './pages/Lecturer/LecturerDashboardPage';
 import LecturerClassesPage from './pages/Lecturer/LecturerClassesPage';
 import LecturerContestsPage from './pages/Lecturer/LecturerContestsPage';
+import LecturerSubmissionsPage from './pages/Lecturer/LecturerSubmissionsPage';
+import LecturerLeaderboardPage from './pages/Lecturer/LecturerLeaderboardPage';
 
 // todo: Adjust Unauthorized and Not Found Page
 const UnauthorizedPage: React.FC = () => (
@@ -55,6 +57,8 @@ const App: React.FC = () => {
                         <Route path="/lecturer/dashboard" element={<LecturerDashboardPage />} />
                         <Route path="/lecturer/classes" element={<LecturerClassesPage />} />
                         <Route path="/lecturer/contests" element={<LecturerContestsPage />} />
+                        <Route path="/lecturer/submissions" element={<LecturerSubmissionsPage />} />
+                        <Route path="/lecturer/leaderboard" element={<LecturerLeaderboardPage />} />
                     </Route>
                     <Route
                         path="*"

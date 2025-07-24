@@ -31,10 +31,10 @@ const TestCaseUploadModal: React.FC<TestCaseUploadModalProps> = ({ open, onClose
 
     if (!open) return null;
     return (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-20 flex items-center justify-center z-50" style={{ backdropFilter: 'blur(2px)' }}>
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[10px]">
             <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg relative">
                 <button className="absolute top-2 right-2 btn btn-sm" onClick={onClose}>&times;</button>
-                <h2 className="text-xl font-bold mb-4">Upload Test Cases</h2>
+                <h2 className="text-xl text-blue-700 font-bold mb-4">Upload Test Cases</h2>
                 {error && <div className="text-red-500 mb-2">{error}</div>}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <select className="select select-bordered" value={selectedCase} aria-label="Select Case" onChange={e => setSelectedCase(e.target.value)}>

@@ -51,27 +51,27 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({ open, onClose, onSubmit, 
 
     if (!open) return null;
     return (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-20 flex items-center justify-center z-50" style={{ backdropFilter: 'blur(2px)' }}>
-            <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg relative">
-                <button className="absolute top-2 right-2 btn btn-sm" onClick={onClose}>&times;</button>
-                <h2 className="text-xl font-bold mb-4">{initialData ? 'Edit Case' : 'Add New Case'}</h2>
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[10px]">
+            <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg border-2 border-blue-200 relative">
+                <button className="absolute top-3 right-3 text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xl shadow transition-colors" onClick={onClose}>&times;</button>
+                <h2 className="text-2xl font-extrabold text-blue-700 mb-4 drop-shadow">{initialData ? 'Edit Case' : 'Add New Case'}</h2>
                 {error && <div className="text-red-500 mb-2">{error}</div>}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <input className="input input-bordered" placeholder="Name" aria-label="Case Name" value={name} onChange={e => setName(e.target.value)} />
-                    <span className="text-xs text-gray-500 ml-1">Enter a descriptive name for the case/problem.</span>
-                    <textarea className="textarea textarea-bordered" placeholder="Description" aria-label="Case Description" value={description} onChange={e => setDescription(e.target.value)} />
-                    <span className="text-xs text-gray-500 ml-1">Provide a detailed description or statement for the case.</span>
-                    <input className="input input-bordered" type="number" placeholder="Time Limit (ms)" aria-label="Time Limit in milliseconds" value={timeLimit} onChange={e => setTimeLimit(e.target.value)} />
-                    <span className="text-xs text-gray-500 ml-1">Maximum time allowed for submissions (in milliseconds).</span>
-                    <input className="input input-bordered" type="number" placeholder="Memory Limit (MB)" aria-label="Memory Limit in megabytes" value={memoryLimit} onChange={e => setMemoryLimit(e.target.value)} />
-                    <span className="text-xs text-gray-500 ml-1">Maximum memory allowed for submissions (in megabytes).</span>
+                    <input className="input input-bordered border-blue-200 focus:border-blue-400" placeholder="Name" aria-label="Case Name" value={name} onChange={e => setName(e.target.value)} />
+                    <span className="text-xs text-blue-600 ml-1">Enter a descriptive name for the case/problem.</span>
+                    <textarea className="textarea textarea-bordered border-blue-200 focus:border-blue-400" placeholder="Description" aria-label="Case Description" value={description} onChange={e => setDescription(e.target.value)} />
+                    <span className="text-xs text-blue-600 ml-1">Provide a detailed description or statement for the case.</span>
+                    <input className="input input-bordered border-blue-200 focus:border-blue-400" type="number" placeholder="Time Limit (ms)" aria-label="Time Limit in milliseconds" value={timeLimit} onChange={e => setTimeLimit(e.target.value)} />
+                    <span className="text-xs text-blue-600 ml-1">Maximum time allowed for submissions (in milliseconds).</span>
+                    <input className="input input-bordered border-blue-200 focus:border-blue-400" type="number" placeholder="Memory Limit (MB)" aria-label="Memory Limit in megabytes" value={memoryLimit} onChange={e => setMemoryLimit(e.target.value)} />
+                    <span className="text-xs text-blue-600 ml-1">Maximum memory allowed for submissions (in megabytes).</span>
                     {!initialData && (
                         <>
-                            <input className="file-input file-input-bordered" type="file" accept="application/pdf" aria-label="PDF file for case statement" onChange={e => setPdfFile(e.target.files?.[0] || null)} />
-                            <span className="text-xs text-gray-500 ml-1">Upload a PDF file containing the problem statement.</span>
+                            <input className="file-input file-input-bordered border-blue-200 focus:border-blue-400" type="file" accept="application/pdf" aria-label="PDF file for case statement" onChange={e => setPdfFile(e.target.files?.[0] || null)} />
+                            <span className="text-xs text-blue-600 ml-1">Upload a PDF file containing the problem statement.</span>
                         </>
                     )}
-                    <button className="btn btn-primary mt-2" type="submit" disabled={loading}>{loading ? 'Saving...' : (initialData ? 'Update Case' : 'Create Case')}</button>
+                    <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow hover:bg-blue-700 transition-colors mt-2" type="submit" disabled={loading}>{loading ? 'Saving...' : (initialData ? 'Update Case' : 'Create Case')}</button>
                 </form>
             </div>
         </div>

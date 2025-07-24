@@ -133,20 +133,20 @@ const ContestPage: React.FC = () => {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="bg-white rounded-xl shadow p-6">
+            <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 rounded-2xl shadow-2xl p-8 border border-blue-100">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">Contests</h1>
+                    <h1 className="text-3xl font-extrabold text-blue-700 drop-shadow">Contests</h1>
                     <div className="flex gap-2">
-                        <button className="btn btn-outline btn-neutral text-gray-800 border-gray-700 hover:bg-gray-800 hover:text-white" onClick={handleAdd}>+ Add New Contest</button>
+                        <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow hover:bg-blue-700 transition-colors" onClick={handleAdd}>+ Add New Contest</button>
                     </div>
                 </div>
                 {feedback && <div className="mb-2 text-green-700 text-gray-800">{feedback}</div>}
                 {(loading || assignmentsLoading) && <div className="text-gray-800">Loading...</div>}
                 {error && <div className="text-red-700 text-gray-800">{error}</div>}
                 <div className="overflow-x-auto">
-                    <table className="table w-full text-gray-800">
+                    <table className="table w-full text-blue-900">
                         <thead>
-                            <tr className="bg-gray-200 text-gray-900">
+                            <tr className="bg-blue-50 text-blue-700">
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Actions</th>
@@ -154,12 +154,12 @@ const ContestPage: React.FC = () => {
                         </thead>
                         <tbody>
                             {contests.map((c: any) => (
-                                <tr key={c.id} className="hover:bg-gray-100">
-                                    <td>{c.name}</td>
+                                <tr key={c.id} className="hover:bg-blue-100 transition-colors">
+                                    <td className="font-bold text-blue-800">{c.name}</td>
                                     <td>{c.description}</td>
                                     <td>
-                                        <button className="btn btn-sm btn-neutral text-white border-gray-700 hover:bg-gray-800 hover:text-white mr-2" onClick={() => handleEdit(c)}>Edit</button>
-                                        <button className="btn btn-sm btn-outline btn-error text-gray-800 border-gray-700 hover:bg-red-800 hover:text-white" onClick={() => handleDelete(c.id)}>Delete</button>
+                                        <button className="btn btn-sm bg-blue-600 text-white font-semibold rounded-lg px-3 py-1 shadow hover:bg-blue-700 transition-colors mr-2" onClick={() => handleEdit(c)}>Edit</button>
+                                        <button className="btn btn-sm bg-red-600 text-white font-semibold rounded-lg px-3 py-1 shadow hover:bg-red-700 transition-colors" onClick={() => handleDelete(c.id)}>Delete</button>
                                     </td>
                                 </tr>
                             ))}
