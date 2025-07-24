@@ -1,7 +1,6 @@
 import axiosClient from "./axiosClient";
 import type { Contest } from "../types/contest";
 import type { Case } from "../types/case";
-import type { Class } from "../types/class";
 import type { ClassContestAssignment } from "../types/class";
 
 /**

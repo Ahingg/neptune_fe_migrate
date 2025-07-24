@@ -8,5 +8,5 @@ export interface ContestDetailAPIResponse {
   id: string;
   name: string;
   description: string;
-  cases: ContestCase[];
+  cases: Case[];
 }

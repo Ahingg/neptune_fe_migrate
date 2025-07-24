@@ -1,3 +1,5 @@
+import type { UserProfile } from "./auth";
+
 interface ClassAssistant {
   ClassTransactionID: string;
   UserID: string;
@@ -18,7 +20,7 @@ interface Class {
   class_code: string;
   class_name?: string;
   students?: UserProfile[];
-  assistants?: ClassAssistant[];
+  assistants?: UserProfile[];
 }
 
 export interface ClassContestAssignment {

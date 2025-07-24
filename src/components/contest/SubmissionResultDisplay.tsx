@@ -51,6 +51,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
     isJudging,
     judgingError,
 }) => {
+    console.log(isJudging)
     if (isJudging && !latestUpdate) {
         return (
             <div className="p-6 bg-base-300 rounded-lg shadow-inner border border-gray-800 text-center">

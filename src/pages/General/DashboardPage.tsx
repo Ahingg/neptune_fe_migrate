@@ -23,7 +23,7 @@ const DashboardPage: React.FC = () => {
         return <LecturerDashboardPage />;
     }
 
-    if (user.role === 'Admin') {
+    if (user.role === 'Student') {
         const currentEnrollments =
             user.enrollments?.filter(
                 (e: UserEnrollmentDetail) => e.semester_id === semester?.semester_id
