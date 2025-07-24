@@ -1,4 +1,5 @@
 // src/api/auth.ts
+import type { LoginRequest, LoginResponse, UserMeResponse } from '../types/auth';
 import axiosClient from './axiosClient';
 
 /**

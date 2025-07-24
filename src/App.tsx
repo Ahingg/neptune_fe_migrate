@@ -1,44 +1,41 @@
-
 import React, { Suspense } from 'react';
 import { Route, BrowserRouter, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/Auth/LoginPage';
-import DashboardPage from './pages/General/DashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import NavbarBottom from './components/NavbarBottom';
+import DashboardRedirector from './pages/General/DashboardRedirector';
 import ClassDetailPage from './pages/General/ClassDetail';
 import ContestCasesPage from './pages/General/ContestCasesPage';
-import CasePage from './pages/General/CasePage'; // fallback for eager load if needed
+import LeaderboardPage from './pages/General/LeaderboardPage';
+import CasePage from './pages/General/CasePage';
 import ContestPage from './pages/General/ContestPage';
 import ClassPage from './pages/General/ClassPage';
-import LeaderboardPage from './pages/General/LeaderboardPage';
-import LecturerDashboardPage from './pages/Lecturer/LecturerDashboardPage';
+import AdminSubmissionDetailPage from './pages/General/AdminSubmissionDetailPage';
 import LecturerClassesPage from './pages/Lecturer/LecturerClassesPage';
 import LecturerContestsPage from './pages/Lecturer/LecturerContestsPage';
 import LecturerSubmissionsPage from './pages/Lecturer/LecturerSubmissionsPage';
 import LecturerLeaderboardPage from './pages/Lecturer/LecturerLeaderboardPage';
 import LecturerSubmissionDetailPage from './pages/Lecturer/LecturerSubmissionDetailPage';
-import AdminSubmissionDetailPage from './pages/General/AdminSubmissionDetailPage';
-
-// todo: Adjust Unauthorized and Not Found Page
-const UnauthorizedPage: React.FC = () => (
-    <div className="container mx-auto p-4 text-error">
-        You are not authorized to view this page.
-    </div>
-);
+import NotFoundPage from './pages/General/NotFoundPage';
+import UnauthorizedPage from './pages/General/UnauthorizedPage';
 
 const App: React.FC = () => {
     const location = useLocation();
+    const noNavRoutes = ['/login', '/unauthorized'];
+    const showNav =
+        !noNavRoutes.includes(location.pathname) &&
+        !location.pathname.startsWith('/404');
 
     return (
         <>
-            {location.pathname !== '/login' && (
+            {showNav && (
                 <>
                     <Navbar />
                     <NavbarBottom />
                 </>
             )}
-            <main className="">
+            <main>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route
@@ -46,8 +43,11 @@ const App: React.FC = () => {
                         element={<UnauthorizedPage />}
                     />
 
+                    {/* GENERAL PROTECTED ROUTES */}
                     <Route element={<ProtectedRoute />}>
-                        <Route path="/" element={<DashboardPage />} />
+                        {/* The main '/' route now uses the redirector */}
+                        <Route path="/" element={<DashboardRedirector />} />
+
                         <Route
                             path="/class/:classId"
                             element={<ClassDetailPage />}
@@ -69,6 +69,8 @@ const App: React.FC = () => {
                             element={<LeaderboardPage />}
                         />
                     </Route>
+
+                    {/* ADMIN PROTECTED ROUTES */}
                     <Route
                         element={<ProtectedRoute allowedRoles={['Admin']} />}
                     >
@@ -101,23 +103,39 @@ const App: React.FC = () => {
                             element={<AdminSubmissionDetailPage />}
                         />
                     </Route>
-                    <Route element={<ProtectedRoute allowedRoles={['Lecturer', 'Assistant']} />}>
-                        <Route path="/lecturer/dashboard" element={<LecturerDashboardPage />} />
-                        <Route path="/lecturer/classes" element={<LecturerClassesPage />} />
-                        <Route path="/lecturer/contests" element={<LecturerContestsPage />} />
-                        <Route path="/lecturer/submissions" element={<LecturerSubmissionsPage />} />
-                        <Route path="/lecturer/leaderboard" element={<LecturerLeaderboardPage />} />
-                        {/* <Route path="/lecturer/submissionDetail" element={<LecturerSubmissionDetailPage />} /> */}
-                        <Route path="/lecturer/submission-detail" element={<LecturerSubmissionDetailPage />} />
-                    </Route>
+
+                    {/* LECTURER & ASSISTANT PROTECTED ROUTES */}
                     <Route
-                        path="*"
                         element={
-                            <div className="container mx-auto p-4">
-                                <h1>404 - Page Not Found</h1>
-                            </div>
+                            <ProtectedRoute
+                                allowedRoles={['Lecturer', 'Assistant']}
+                            />
                         }
-                    />
+                    >
+                        {/* Note: The main lecturer dashboard is handled by the redirector at '/' */}
+                        <Route
+                            path="/lecturer/classes"
+                            element={<LecturerClassesPage />}
+                        />
+                        <Route
+                            path="/lecturer/contests"
+                            element={<LecturerContestsPage />}
+                        />
+                        <Route
+                            path="/lecturer/submissions"
+                            element={<LecturerSubmissionsPage />}
+                        />
+                        <Route
+                            path="/lecturer/leaderboard"
+                            element={<LecturerLeaderboardPage />}
+                        />
+                        <Route
+                            path="/lecturer/submission-detail"
+                            element={<LecturerSubmissionDetailPage />}
+                        />
+                    </Route>
+
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </main>
         </>

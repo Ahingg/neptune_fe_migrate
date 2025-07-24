@@ -2,172 +2,174 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useContestDetails } from '../../hooks/useContestDetail';
 import useClassDetails from '../../hooks/useClassDetail';
-import { useSubmissionHistory } from '../../hooks/useSubmissionHistory';
-import useContestCases from '../../hooks/useContestCases';
-import axios from 'axios';
+import { useClassContestSubmissions } from '../../hooks/useClassContestSubmissions';
+import CodeViewer from '../../components/lecturer/CodeViewer';
+import type { UserProfile } from '../../types/auth';
+import type { SubmissionHistoryItem } from '../../types/submission';
+import type { Case } from '../../types/case';
+
 
 const LecturerSubmissionDetailPage: React.FC = () => {
-    // Get classId and contestId from query params
     const [searchParams] = useSearchParams();
     const classId = searchParams.get('classId') || undefined;
     const contestId = searchParams.get('contestId') || undefined;
 
-    // Fetch contest and cases
-    const { contest, loading: contestLoading } = useContestDetails(contestId);
-    // Fetch class and students
-    const { classData, loading: classLoading } = useClassDetails(classId);
-    // Fetch all submissions for this contest/class
-    const { submissions, loading: submissionsLoading } = useSubmissionHistory(contestId, classId);
-    console.log('LecturerSubmissionDetailPage: contestId', contestId, 'classId', classId);
-    console.log('LecturerSubmissionDetailPage: submissions', submissions);
+    const { contest, cases } = useContestDetails(contestId);
+    const { classData } = useClassDetails(classId);
+    const { submissions, loading: submissionsLoading } =
+        useClassContestSubmissions(classId, contestId);
 
-    // Use useContestCases to fetch cases for the contest
-    const { cases, loading: casesLoading, error: casesError } = useContestCases(contestId);
+    const [selectedStudent, setSelectedStudent] = useState<UserProfile | null>(
+        null
+    );
+    const [selectedCase, setSelectedCase] = useState<Case | null>(null);
+    const [selectedSubmission, setSelectedSubmission] =
+        useState<SubmissionHistoryItem | null>(null);
 
-    // State for selected student/case/submission
-    const [selectedStudentId, setSelectedStudentId] = useState<string | undefined>(undefined);
-    const [selectedCaseId, setSelectedCaseId] = useState<string | undefined>(undefined);
-    const [selectedSubmissionId, setSelectedSubmissionId] = useState<string | undefined>(undefined);
-    const [submissionCodes, setSubmissionCodes] = useState<{ [id: string]: string }>({});
-
-    // Set defaults when data loads
-    React.useEffect(() => {
-        if (!selectedStudentId && classData?.students?.length) {
-            setSelectedStudentId(classData.students[0].user_id);
-        }
-    }, [classData, selectedStudentId]);
-    React.useEffect(() => {
-        if (!selectedCaseId && cases?.length) {
-            setSelectedCaseId(cases[0].case_id);
-        }
-    }, [cases, selectedCaseId]);
-
-    // Filter submissions for selected student and case
+    // Filter submissions based on selected student and case
     const filteredSubmissions = useMemo(() => {
-        if (!selectedStudentId || !selectedCaseId) return [];
-        return submissions.filter((s: any) => s.user_id === selectedStudentId && s.case_id === selectedCaseId);
-    }, [submissions, selectedStudentId, selectedCaseId]);
+        return submissions
+            .filter(
+            (s) =>
+                (!selectedStudent || s.user_id === selectedStudent.user_id) &&
+                (!selectedCase || s.case_id === selectedCase.case_id)
+            )
+            .sort((a, b) => new Date(b.submit_time).getTime() - new Date(a.submit_time).getTime());
+    }, [submissions, selectedStudent, selectedCase]);
 
-    // Set default selected submission when filtered list changes
-    React.useEffect(() => {
-        if (filteredSubmissions.length && !selectedSubmissionId) {
-            setSelectedSubmissionId(filteredSubmissions[0].submission_id);
-        }
-        if (!filteredSubmissions.length) {
-            setSelectedSubmissionId(undefined);
-        }
-    }, [filteredSubmissions, selectedSubmissionId]);
-
-    const selectedSubmission = filteredSubmissions.find((s: any) => s.submission_id === selectedSubmissionId);
-
-    // Eagerly fetch all codes when submissions change
+    // Auto-select first student and case when data loads
     useEffect(() => {
-        if (submissions.length > 0) {
-            Promise.all(
-                submissions.map(sub =>
-                    axios
-                        .get(`/api/submissions/${sub.submission_id}/code`, {
-                            withCredentials: true,
-                            responseType: 'text',
-                        })
-                        .then(res => ({ id: sub.submission_id, code: res.data }))
-                        .catch(() => ({ id: sub.submission_id, code: '// Failed to load code' }))
-                )
-            ).then(results => {
-                const codeMap: { [id: string]: string } = {};
-                results.forEach(({ id, code }) => {
-                    codeMap[id] = code;
-                });
-                setSubmissionCodes(codeMap);
-            });
+        if (classData?.students?.length && !selectedStudent) {
+            setSelectedStudent(classData.students[0]);
         }
-    }, [submissions]);
+    }, [classData, selectedStudent]);
+
+    useEffect(() => {
+        if (cases.length > 0 && !selectedCase) {
+            setSelectedCase(cases[0]);
+        }
+    }, [cases]);
+
+    // Auto-select first submission in the filtered list
+    useEffect(() => {
+        setSelectedSubmission(filteredSubmissions[0] || null);
+    }, [filteredSubmissions]);
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="bg-gradient-to-br from-blue-100 via-white to-blue-200 rounded-2xl shadow-2xl p-8 border border-blue-100">
-                {/* Top: Contest name and dropdowns */}
-                <div className="flex flex-col md:flex-row gap-6 mb-6 items-center">
-                    <div className="text-2xl font-bold text-blue-800 flex-1">
-                        {contestLoading ? 'Loading...' : contest?.name || 'Contest'}
-                    </div>
-                    <div className="flex gap-4 flex-1 justify-end">
-                        <select
-                            className="select select-bordered bg-white border-blue-200 text-blue-800"
-                            value={selectedCaseId || ''}
-                            onChange={e => setSelectedCaseId(e.target.value)}
-                            disabled={casesLoading}
-                        >
-                            {casesLoading ? (
-                                <option>Loading...</option>
-                            ) : casesError ? (
-                                <option>Error loading cases</option>
-                            ) : cases.map((c: any) => (
-                                <option key={c.case_id} value={c.case_id}>{c.problem_code} - {c.name}</option>
+        <div className=" mx-auto p-6">
+            <div className="bg-base-300 border border-gray-600 rounded-xl shadow p-6">
+                <h2 className="text-3xl font-bold mb-4 text-blue-700">
+                    {contest?.name || 'Submissions'}
+                </h2>
+
+                <div
+                    className="flex flex-col lg:flex-row gap-6"
+                    style={{ height: '75vh' }}
+                >
+                    {/* Student List Panel */}
+                    <div className="lg:w-1/4 bg-base-100/50 p-4 rounded-lg border border-gray-600 flex flex-col">
+                        <h3 className="font-bold text-blue-500 mb-2 flex-shrink-0">
+                            Students
+                        </h3>
+                        <ul className="space-y-2 overflow-y-auto pr-2 flex-grow">
+                            {classData?.students?.map((s) => (
+                                <li key={s.user_id}>
+                                    <button
+                                        onClick={() => setSelectedStudent(s)}
+                                        className={`w-full text-left p-2 rounded-md text-sm ${
+                                            selectedStudent?.user_id ===
+                                            s.user_id
+                                                ? 'bg-blue-700 text-white'
+                                                : 'bg-base-200 hover:bg-base-100'
+                                        }`}
+                                    >
+                                        {s.name}
+                                    </button>
+                                </li>
                             ))}
-                        </select>
-                    </div>
-                </div>
-                <div className="flex gap-6 h-[600px]">
-                    {/* Sidebar: Student List */}
-                    <div className="w-1/5 bg-white rounded-xl shadow p-4 overflow-y-auto flex flex-col">
-                        <div className="font-bold text-blue-700 mb-2">Student List</div>
-                        <ul className="space-y-1">
-                            {classLoading ? (
-                                <li>Loading...</li>
-                            ) : classData?.students?.length ? (
-                                classData.students.map((s: any) => (
-                                    <li key={s.user_id}>
-                                        <button
-                                            className={`w-full text-left px-2 py-1 rounded transition-colors ${selectedStudentId === s.user_id ? 'bg-blue-200 text-blue-900 font-bold' : 'hover:bg-blue-100 text-blue-800'}`}
-                                            onClick={() => setSelectedStudentId(s.user_id)}
-                                        >
-                                            {s.username} - {s.name}
-                                        </button>
-                                    </li>
-                                ))
-                            ) : (
-                                <li>No students found.</li>
-                            )}
                         </ul>
                     </div>
-                    {/* Main: Submission List + Detail + Code */}
-                    <div className="flex-1 bg-white rounded-xl shadow p-4 flex flex-row gap-4">
-                        {/* Submission List */}
-                        <div className="w-1/4 flex flex-col border-r-2 border-blue-200 pr-4">
-                            <div className="font-bold text-blue-700 mb-2">Submissions</div>
-                            <ul className="space-y-1">
-                                {submissionsLoading ? (
-                                    <li>Loading...</li>
-                                ) : filteredSubmissions.length ? (
-                                    filteredSubmissions.map((sub: any, idx: number) => (
-                                        <li key={sub.submission_id}>
-                                            <button
-                                                className={`w-full text-left px-2 py-1 rounded transition-colors ${selectedSubmissionId === sub.submission_id ? 'bg-blue-200 text-blue-900 font-bold' : 'hover:bg-blue-100 text-blue-800'}`}
-                                                onClick={() => {
-                                                    console.log('Clicked submission:', sub.submission_id);
-                                                    setSelectedSubmissionId(sub.submission_id);
-                                                }}
-                                            >
-                                                {`Submission ${idx + 1} - ${sub.score}`}
-                                            </button>
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li>No submissions found.</li>
-                                )}
-                            </ul>
-                        </div>
-                        {/* Submission Detail + Code */}
-                        <div className="flex-1 flex flex-col">
-                            <div className="flex justify-between items-center mb-2">
-                                <div className="font-bold text-blue-700">Score: {selectedSubmission?.score ?? '-'}</div>
-                                <div className="font-bold text-blue-700">Submit time: {selectedSubmission?.submit_time ?? '-'}</div>
+
+                    {/* Main Content Panel */}
+                    <div className="lg:w-3/4 flex flex-col gap-4">
+                        <select
+                            className="select select-bordered w-full h-[8vh] bg-base-100"
+                            value={selectedCase?.case_id || ''}
+                            onChange={(e) =>
+                                setSelectedCase(
+                                    cases.find(
+                                        (c) => c.case_id === e.target.value
+                                    ) || null
+                                )
+                            }
+                        >
+                            <option value="">All Cases</option>
+                            {cases.map((c: Case) => (
+                                <option key={c.case_id} value={c.case_id}>
+                                    {c.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        <div className="flex-grow flex flex-col md:flex-row gap-4 min-h-0">
+                            <div className="md:w-1/2 bg-base-100/50 p-4 rounded-lg border border-gray-600 flex flex-col">
+                                <h3 className="font-bold text-blue-500 mb-2 flex-shrink-0">
+                                    Submissions
+                                </h3>
+                                <div className="overflow-y-auto flex-grow">
+                                    <table className="table table-sm w-full">
+                                        <tbody>
+                                            {submissionsLoading ? (
+                                                <tr>
+                                                    <td>Loading...</td>
+                                                </tr>
+                                            ) : (
+                                                filteredSubmissions.map(
+                                                    (sub) => (
+                                                        <tr
+                                                            key={
+                                                                sub.submission_id
+                                                            }
+                                                            onClick={() =>
+                                                                setSelectedSubmission(
+                                                                    sub
+                                                                )
+                                                            }
+                                                            className={`cursor-pointer ${
+                                                                selectedSubmission?.submission_id ===
+                                                                sub.submission_id
+                                                                    ? 'bg-blue-700 text-white'
+                                                                    : 'hover:bg-base-200'
+                                                            }`}
+                                                        >
+                                                            <td>
+                                                                {sub.case_code}
+                                                            </td>
+                                                            <td
+                                                                className={
+                                                                    sub.status ===
+                                                                    'Accepted'
+                                                                        ? 'text-green-400'
+                                                                        : 'text-red-400'
+                                                                }
+                                                            >
+                                                                {sub.status}
+                                                                <div className="text-xs text-gray-400">
+                                                                    {new Date(sub.submit_time).toLocaleString()}
+                                                                </div>
+                                                            </td>
+                                                            <td>{sub.score}</td>
+                                                        </tr>
+                                                    )
+                                                )
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div className="font-bold text-blue-700 mb-2">CODE</div>
-                            <pre className="bg-blue-50 rounded-xl p-4 text-sm text-gray-800 overflow-x-auto flex-1">
-                                {selectedSubmissionId ? submissionCodes[selectedSubmissionId] || '// No code' : '// No code'}
-                            </pre>
+                            <div className="md:w-1/2 flex flex-col">
+                                <CodeViewer submission={selectedSubmission} />
+                            </div>
                         </div>
                     </div>
                 </div>
