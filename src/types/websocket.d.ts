@@ -14,6 +14,6 @@ interface WebSocketSubmissionUpdate {
     submission_id: string;
     case_id: string; // ID of the case being judged
     score: number; // Overall score for the submission
-    final_status: SubmissionStatus; // Overall verdict (e.g., "Accepted", "Wrong Answer")
+    status: SubmissionStatus; // Overall verdict (e.g., "Accepted", "Wrong Answer")
     testcases: TestCaseJudgingResult[]; // Detailed results for each testcase
 }

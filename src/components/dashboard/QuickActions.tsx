@@ -1,13 +1,13 @@
 import React from 'react';
-import ActionCard from '../cards/ActionCard';
+import ActionCard from '../cards/ActionCard'; // Assuming ActionCard is styled appropriately
 
 const QuickActions: React.FC = () => {
     return (
         <div className="w-full">
-            <h3 className="text-xl font-bold text-blue-500 mb-4 text-left">
+            <h3 className="text-xl font-bold text-blue-700  mb-4">
                 Quick Actions
             </h3>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
                 <ActionCard
                     to="/contests"
                     icon="emoji_events"
@@ -15,16 +15,10 @@ const QuickActions: React.FC = () => {
                     description="View and participate in contests"
                 />
                 <ActionCard
-                    to="/cases"
-                    icon="description"
-                    title="Cases"
-                    description="Manage and view all cases"
-                />
-                <ActionCard
-                    to="/classes"
-                    icon="class"
-                    title="Classes"
-                    description="Manage and view all classes"
+                    to="/leaderboard"
+                    icon="leaderboard"
+                    title="Leaderboard"
+                    description="View overall rankings"
                 />
             </div>
         </div>

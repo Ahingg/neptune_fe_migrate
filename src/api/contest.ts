@@ -1,7 +1,6 @@
 import axiosClient from "./axiosClient";
-import type { Contest } from "../types/contest";
+import type { Contest, GlobalContestDetailResponse, GlobalContestResponse } from "../types/contest";
 import type { Case } from "../types/case";
-import type { Class } from "../types/class";
 import type { ClassContestAssignment } from "../types/class";
 
 /**
@@ -91,4 +90,21 @@ export const getCasesForContestApi = async (
 ): Promise<Case[]> => {
   const res = await axiosClient.get(`/api/contest/${contestId}/cases`);
   return res.data;
+};
+
+/**
+ * Fetches all global contests without their detailed cases.
+ */
+export const getAllGlobalContestsApi = async (): Promise<GlobalContestResponse[]> => {
+  const response = await axiosClient.get<GlobalContestResponse[]>('/api/contests/global');
+  return response.data;
+};
+
+/**
+ * Fetches the details of a single global contest, including its cases.
+ * @param contestId The ID of the global contest.
+ */
+export const getGlobalContestDetailApi = async (contestId: string): Promise<GlobalContestDetailResponse> => {
+  const response = await axiosClient.get<GlobalContestDetailResponse>(`/api/contests/global-detail?id=${contestId}`);
+  return response.data;
 };

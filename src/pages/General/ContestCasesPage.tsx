@@ -21,7 +21,7 @@ const ContestCasesPage: React.FC = () => {
     const submissionProps = useSubmission(contestId, cases);
 
     const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
-
+    // console.log(cases)
     useEffect(() => {
         if (cases.length > 0 && !selectedCaseId) {
             setSelectedCaseId(cases[0].case_id);
@@ -29,6 +29,7 @@ const ContestCasesPage: React.FC = () => {
     }, [cases, selectedCaseId]);
 
     const selectedCase = useMemo(() => {
+        // console.log(cases.find((c: Case) => c.case_id === selectedCaseId))
         return cases.find((c: Case) => c.case_id === selectedCaseId) || null;
     }, [cases, selectedCaseId]);
 
@@ -64,7 +65,7 @@ const ContestCasesPage: React.FC = () => {
                             <select
                                 className="select select-bordered w-full"
                                 value={selectedCaseId || ''}
-                                onChange={(e) => 
+                                onChange={(e) =>
                                     setSelectedCaseId(e.target.value)
                                 }
                             >
