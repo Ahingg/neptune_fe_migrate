@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAtom } from "jotai";
 import { submissionHistoryCacheAtom } from "../store/submission";
 import type { SubmissionHistoryItem } from "../types/submission";
@@ -57,6 +57,6 @@ export const useSubmissionHistory = (
   }, [contestId, classId, setCache]);
 
   const submissions = cache[contestId || ''] || [];
-  console.log('Submission history for contest:', contestId, 'is', submissions);
+  // console.log('Submission history for contest:', contestId, 'is', submissions);
   return { submissions, loading, error };
 };
