@@ -6,11 +6,13 @@ import type { Class } from '../../types/class';
 import type { ClassContestAssignment } from '../../types/class';
 import type { Case } from '../../types/case';
 import { createCasePdfFileUrl } from '../../utils/urlMaker';
+import { useNavigate } from 'react-router-dom';
 
 const LecturerContestsPage: React.FC = () => {
     const { classes, loading: classesLoading, error: classesError } = useLecturerClasses();
     const [selectedClassId, setSelectedClassId] = useState<string | undefined>(undefined);
     const [selectedContestId, setSelectedContestId] = useState<string | undefined>(undefined);
+    const navigate = useNavigate();
 
     // Set default class on load
     useEffect(() => {
@@ -130,6 +132,20 @@ const LecturerContestsPage: React.FC = () => {
                                         ))}
                                     </ul>
                                 )}
+                                {/* Add button below problems list */}
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        className="px-6 py-2 bg-blue-700 text-white rounded-lg font-bold hover:bg-blue-800 transition-colors shadow"
+                                        onClick={() => {
+                                            if (selectedClassId && selectedContestId) {
+                                                navigate(`/lecturer/submission-detail?classId=${selectedClassId}&contestId=${selectedContestId}`);
+                                            }
+                                        }}
+                                        disabled={!selectedClassId || !selectedContestId}
+                                    >
+                                        View Submission Details
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             <div className="text-gray-400 text-center mt-8">Select a contest to view details</div>

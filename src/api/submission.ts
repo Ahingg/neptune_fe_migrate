@@ -1,6 +1,8 @@
-import type { SubmissionHistoryItem, SubmitCodeResponse } from '../types/submission';
-import axiosClient from './axiosClient';
-
+import type {
+  SubmissionHistoryItem,
+  SubmitCodeResponse,
+} from "../types/submission";
+import axiosClient from "./axiosClient";
 
 // Function for submitting code as multipart/form-data (handles both string and file)
 export const submitCodeApi = async (
@@ -35,14 +37,13 @@ export const getSubmissionsForContestApi = async (
   contestId: string,
   classTransactionId?: string
 ): Promise<SubmissionHistoryItem[]> => {
-  let url = `/api/submission/${contestId}`;
-  
+  let url = `/api/submission/all/${contestId}`;
+
   // Conditionally add the class transaction ID as a query parameter
   if (classTransactionId) {
     url += `?class_transaction_id=${classTransactionId}`;
   }
 
   const response = await axiosClient.get<SubmissionHistoryItem[]>(url);
-  return response.data;
+  return response.data || [];
 };
-

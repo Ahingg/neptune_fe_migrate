@@ -17,6 +17,8 @@ import LecturerClassesPage from './pages/Lecturer/LecturerClassesPage';
 import LecturerContestsPage from './pages/Lecturer/LecturerContestsPage';
 import LecturerSubmissionsPage from './pages/Lecturer/LecturerSubmissionsPage';
 import LecturerLeaderboardPage from './pages/Lecturer/LecturerLeaderboardPage';
+import LecturerSubmissionDetailPage from './pages/Lecturer/LecturerSubmissionDetailPage';
+import AdminSubmissionDetailPage from './pages/General/AdminSubmissionDetailPage';
 
 // todo: Adjust Unauthorized and Not Found Page
 const UnauthorizedPage: React.FC = () => (
@@ -86,6 +88,10 @@ const App: React.FC = () => {
                                 </Suspense>
                             }
                         />
+                        <Route
+                            path="/general/admin-submission-detail"
+                            element={<AdminSubmissionDetailPage />}
+                        />
                     </Route>
                     <Route element={<ProtectedRoute allowedRoles={['Lecturer', 'Assistant']} />}>
                         <Route path="/lecturer/dashboard" element={<LecturerDashboardPage />} />
@@ -93,6 +99,8 @@ const App: React.FC = () => {
                         <Route path="/lecturer/contests" element={<LecturerContestsPage />} />
                         <Route path="/lecturer/submissions" element={<LecturerSubmissionsPage />} />
                         <Route path="/lecturer/leaderboard" element={<LecturerLeaderboardPage />} />
+                        {/* <Route path="/lecturer/submissionDetail" element={<LecturerSubmissionDetailPage />} /> */}
+                        <Route path="/lecturer/submission-detail" element={<LecturerSubmissionDetailPage />} />
                     </Route>
                     <Route
                         path="*"

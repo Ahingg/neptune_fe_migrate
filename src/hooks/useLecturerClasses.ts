@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { getCurrentSemesterApi } from "../api/semester";
-import { getAllClassesBySemesterIdApi } from "../api/class";
-import { getMeApi } from "../api/auth";
-import { getClassByIdApi } from "../api/class";
+import { getAllClassesBySemesterIdApi, getClassByIdApi } from "../api/class";
 import type { Class } from "../types/class";
+import { getCurrentSemesterApi } from "../api/semester";
+import { getMeApi } from "../api/auth";
 
 const useLecturerClasses = () => {
   const [classes, setClasses] = useState<Class[]>([]);

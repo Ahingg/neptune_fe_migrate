@@ -35,15 +35,3 @@ export const getAllClassesBySemesterIdApi = async (
   const response = await axiosClient.get<Class[]>(url);
   return response.data;
 };
-
-/**
- * Fetches all class contest assignments (class contests) for admin.
- */
-export const getAllClassContestsApi = async (): Promise<
-  ClassContestAssignment[]
-> => {
-  const response = await axiosClient.get<ClassContestAssignment[]>(
-    "/api/class-contests"
-  );
-  return response.data;
-};
