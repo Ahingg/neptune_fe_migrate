@@ -70,11 +70,11 @@ const ContestFormModal: React.FC<ContestFormModalProps> = ({ open, onClose, onSu
                 <h2 className="text-2xl font-extrabold text-blue-700 mb-4 drop-shadow">{initialData ? 'Edit Contest' : 'Add New Contest'}</h2>
                 {/* DEBUG: Show current semester and class list */}
                 <div className="mb-2 p-2 bg-blue-50 rounded text-xs border border-blue-100">
-                    <div><b>Current Semester:</b> {semesterLoading ? 'Loading...' : semester ? `${semester.description} (${semester.semester_id})` : 'None'}</div>
+                    <div><b>Current Semester:</b> {semesterLoading ? 'Loading...' : semester ? `${semester.description}` : 'None'}</div>
                     <div><b>Course:</b> <select className="select select-bordered select-xs border-blue-200 text-white bg-blue-700" value={selectedCourseId} onChange={e => setSelectedCourseId(e.target.value)}>
                         {courseOptions.map(opt => <option key={opt.id} value={opt.id}>{opt.name}</option>)}
                     </select></div>
-                    <div><b>Classes in Semester:</b> {classesLoading ? 'Loading...' : (classes || []).length === 0 ? 'None' : (classes || []).map(cls => `${cls.class_code} (${cls.class_transaction_id})`).join(', ')}</div>
+                    <div><b>Classes in Semester:</b> {classesLoading ? 'Loading...' : (classes || []).length === 0 ? 'None' : (classes || []).map(cls => `${cls.class_code}`).join(', ')}</div>
                 </div>
                 {error && <div className="text-red-500 mb-2">{error}</div>}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-gray-800">
@@ -136,7 +136,7 @@ const ContestFormModal: React.FC<ContestFormModalProps> = ({ open, onClose, onSu
                             </div>
                         )}
                     </div>
-                    <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow hover:bg-blue-700 transition-colors mt-2" type="submit" disabled={loading}>{loading ? 'Saving...' : (initialData ? 'Update Contest' : 'Create Contest')}</button>
+                    <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow border-none hover:bg-blue-700 transition-colors mt-2" type="submit" disabled={loading}>{loading ? 'Saving...' : (initialData ? 'Update Contest' : 'Create Contest')}</button>
                 </form>
             </div>
         </div>

@@ -46,7 +46,7 @@ const TestCaseUploadModal: React.FC<TestCaseUploadModalProps> = ({ open, onClose
                     <span className="text-xs text-gray-500 ml-1">Choose the case to which you want to assign these test cases.</span>
                     <input className="file-input file-input-bordered" type="file" accept=".zip,application/zip" aria-label="Test case zip file" onChange={e => setZipFile(e.target.files?.[0] || null)} />
                     <span className="text-xs text-gray-500 ml-1">Upload a zip file containing all test cases for the selected case.</span>
-                    <button className="btn btn-primary mt-2" type="submit" disabled={loading}>{loading ? 'Uploading...' : 'Upload'}</button>
+                    <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow border-none hover:bg-blue-700 transition-colors mt-2" type="submit" disabled={loading}>{loading ? 'Uploading...' : 'Upload'}</button>
                 </form>
             </div>
         </div>

@@ -71,7 +71,7 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({ open, onClose, onSubmit, 
                             <span className="text-xs text-blue-600 ml-1">Upload a PDF file containing the problem statement.</span>
                         </>
                     )}
-                    <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow hover:bg-blue-700 transition-colors mt-2" type="submit" disabled={loading}>{loading ? 'Saving...' : (initialData ? 'Update Case' : 'Create Case')}</button>
+                    <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow border-none hover:bg-blue-700 transition-colors mt-2" type="submit" disabled={loading}>{loading ? 'Saving...' : (initialData ? 'Update Case' : 'Create Case')}</button>
                 </form>
             </div>
         </div>
