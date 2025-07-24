@@ -51,3 +51,14 @@ type SubmissionStatus =
     | 'Compile Error'
     | 'Runtime Error'
     | 'Internal Error';
+
+export interface SubmissionHistoryItem {
+    submission_id: string;
+    contest_id: string;
+    case_id: string;
+    case_code: string;
+    status: string;
+    score: number;
+    submit_time: string; // ISO 8601 string
+    language_id: number;
+}

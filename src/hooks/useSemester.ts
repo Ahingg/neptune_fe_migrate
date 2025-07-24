@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getCurrentSemesterApi } from '../api/semester';
+import type { Semester } from '../types/semester';
 
 interface UseSemesterResult {
     semester: Semester | null;

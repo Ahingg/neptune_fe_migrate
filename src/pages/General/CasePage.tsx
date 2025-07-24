@@ -6,7 +6,7 @@ import TestCaseUploadModal from '../../components/case/TestCaseUploadModal';
 import { uploadTestCases } from '../../api/case';
 
 const CasePage: React.FC = () => {
-    const { cases, loading, error, createCase, updateCase, deleteCase, fetchCases } = useCases();
+    const { cases, loading, error, createCase, updateCase, deleteCase } = useCases();
     const [showModal, setShowModal] = useState(false);
     const [editCase, setEditCase] = useState<Case | null>(null);
     const [modalLoading, setModalLoading] = useState(false);
@@ -77,9 +77,9 @@ const CasePage: React.FC = () => {
                         <button className="btn bg-blue-100 text-blue-800 font-semibold rounded-lg px-4 py-2 shadow border-none hover:bg-blue-200 transition-colors" onClick={() => setShowTestModal(true)}>Upload Test Cases</button>
                     </div>
                 </div>
-                {feedback && <div className="mb-2 text-green-700 text-gray-800">{feedback}</div>}
+                {feedback && <div className="mb-2 text-green-700">{feedback}</div>}
                 {loading && <div className="text-gray-800">Loading...</div>}
-                {error && <div className="text-red-700 text-gray-800">{error}</div>}
+                {error && <div className="text-red-700">{error}</div>}
                 <div className="overflow-x-auto">
                     <table className="table w-full text-blue-900">
                         <thead>
