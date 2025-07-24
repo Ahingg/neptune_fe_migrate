@@ -32,6 +32,7 @@ const ContestCard: React.FC<ContestCardProps> = ({ assignment, status }) => {
                         ? 'hover:bg-opacity-80 transition-colors'
                         : ''
                 }`}
+                key={assignment.contest_id}
             >
             <div className=''>
                 <h3 className="font-bold text-blue-600">

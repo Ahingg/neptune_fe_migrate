@@ -26,6 +26,7 @@ const SubmissionWorkspace: React.FC<SubmissionWorkspaceProps> = (props) => {
             setActiveTab('result');
         }
     }, [props.isJudging, props.latestUpdate]);
+    
 
     return (
         <div className="bg-base-300 rounded-lg shadow-inner border border-gray-600 h-full">
