@@ -1,12 +1,13 @@
+
 import { useState, useEffect } from 'react';
 import { getClassByIdApi, getContestsForClassApi } from '../api/class';
 import type { Class, ClassContestAssignment } from '../types/class';
 
 interface UseClassDetailsResult {
-    classData: Class | null;
-    contests: ClassContestAssignment[];
-    loading: boolean;
-    error: string | null;
+  classData: Class | null;
+  contests: ClassContestAssignment[];
+  loading: boolean;
+  error: string | null;
 }
 
 /**
@@ -14,44 +15,44 @@ interface UseClassDetailsResult {
  * @param classId The ID of the class.
  */
 export const useClassDetails = (
-    classId: string | undefined
+  classId: string | undefined
 ): UseClassDetailsResult => {
-    const [classData, setClassData] = useState<Class | null>(null);
-    const [contests, setContests] = useState<ClassContestAssignment[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+  const [classData, setClassData] = useState<Class | null>(null);
+  const [contests, setContests] = useState<ClassContestAssignment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!classId) {
-            setLoading(false);
-            setError('No Class ID provided.');
-            return;
-        }
+  useEffect(() => {
+    if (!classId) {
+      setLoading(false);
+      setError("No Class ID provided.");
+      return;
+    }
 
-        const fetchDetails = async () => {
-            try {
-                setLoading(true);
-                // Fetch class details and contests in parallel for efficiency
-                const [classResult, contestsResult] = await Promise.all([
-                    getClassByIdApi(classId),
-                    getContestsForClassApi(classId),
-                ]);
+    const fetchDetails = async () => {
+      try {
+        setLoading(true);
+        // Fetch class details and contests in parallel for efficiency
+        const [classResult, contestsResult] = await Promise.all([
+          getClassByIdApi(classId),
+          getContestsForClassApi(classId),
+        ]);
 
-                setClassData(classResult);
-                setContests(contestsResult);
-                setError(null);
-            } catch (err: any) {
-                console.error('Failed to fetch class details:', err);
-                setError(
-                    err.response?.data?.error || 'Failed to load class data.'
-                );
-            } finally {
-                setLoading(false);
-            }
-        };
+        setClassData(classResult);
+        setContests(contestsResult);
+        setError(null);
+      } catch (err: any) {
+        console.error("Failed to fetch class details:", err);
+        setError(err.response?.data?.error || "Failed to load class data.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        fetchDetails();
-    }, [classId]); // Refetch if the classId changes
+    fetchDetails();
+  }, [classId]); // Refetch if the classId changes
 
-    return { classData, contests, loading, error };
+  return { classData, contests, loading, error };
 };
+
+export default useClassDetails;

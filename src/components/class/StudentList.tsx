@@ -72,4 +72,5 @@ const StudentList: React.FC<StudentListProps> = ({ students }) => {
     );
 };
 
+
 export default StudentList;

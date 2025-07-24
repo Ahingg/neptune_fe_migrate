@@ -26,11 +26,11 @@ export const getContestsForClassApi = async (
 // Fetch all classes by semesterId and courseId using the correct backend endpoint
 export const getAllClassesBySemesterIdApi = async (
   semesterId: string,
-  courseId: string
+  courseId?: string
 ): Promise<Class[]> => {
-  const response = await axiosClient.get<Class[]>(
-    `/api/classes?semester_id=${semesterId}&course_id=${courseId}`
-  );
+  let url = `/api/classes?semester_id=${semesterId}`;
+  if (courseId) url += `&course_id=${courseId}`;
+  const response = await axiosClient.get<Class[]>(url);
   return response.data;
 };
 

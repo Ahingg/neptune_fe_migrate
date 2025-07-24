@@ -1,11 +1,24 @@
-export interface Class {
+interface ClassAssistant {
+  ClassTransactionID: string;
+  UserID: string;
+  User: {
+    ID: string;
+    Username: string;
+    Name: string;
+    Role: string;
+    CreatedAt: string;
+    UpdatedAt: string;
+  };
+}
+
+interface Class {
   class_transaction_id: string;
-  class_name: string;
-  class_code: string;
-  course_outline_id: string;
   semester_id: string;
+  course_outline_id: string;
+  class_code: string;
+  class_name?: string;
   students?: UserProfile[];
-  assistants?: UserProfile[];
+  assistants?: ClassAssistant[];
 }
 
 export interface ClassContestAssignment {
