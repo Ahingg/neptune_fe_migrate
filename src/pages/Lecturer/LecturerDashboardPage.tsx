@@ -60,10 +60,10 @@ const LecturerDashboardPage: React.FC = () => {
                             description="View your assigned classes"
                         />
                         <ActionCard
-                            to="/contests"
+                            to="/lecturer/contests"
                             icon="emoji_events"
                             title="Contests"
-                            description="View and participate in contests"
+                            description="View contests for your classes"
                         />
                         <ActionCard
                             to="/submission"

@@ -13,6 +13,7 @@ import ContestPage from './pages/General/ContestPage';
 import ClassPage from './pages/General/ClassPage';
 import LecturerDashboardPage from './pages/Lecturer/LecturerDashboardPage';
 import LecturerClassesPage from './pages/Lecturer/LecturerClassesPage';
+import LecturerContestsPage from './pages/Lecturer/LecturerContestsPage';
 
 // todo: Adjust Unauthorized and Not Found Page
 const UnauthorizedPage: React.FC = () => (
@@ -53,6 +54,7 @@ const App: React.FC = () => {
                     <Route element={<ProtectedRoute allowedRoles={['Lecturer', 'Assistant']} />}>
                         <Route path="/lecturer/dashboard" element={<LecturerDashboardPage />} />
                         <Route path="/lecturer/classes" element={<LecturerClassesPage />} />
+                        <Route path="/lecturer/contests" element={<LecturerContestsPage />} />
                     </Route>
                     <Route
                         path="*"

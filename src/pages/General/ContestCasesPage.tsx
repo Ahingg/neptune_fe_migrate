@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSubmission } from '../../hooks/useSubmission';
 import CaseDisplay from '../../components/contest/CaseDisplay';
@@ -28,11 +28,11 @@ const ContestCasesPage: React.FC = () => {
     const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
 
     // Set the first case as selected by default once they load
-    useState(() => {
+    useEffect(() => {
         if (cases.length > 0 && !selectedCaseId) {
             setSelectedCaseId(cases[0].case_id);
         }
-    });
+    }, [cases, selectedCaseId]);
 
     const selectedCase = useMemo(() => {
         return cases.find((c) => c.case_id === selectedCaseId) || null;

@@ -1,36 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
-import { getAllClassContestsApi } from "../api/class";
+import { useEffect, useState } from "react";
+import { getContestsForClassApi } from "../api/class";
 import type { ClassContestAssignment } from "../types/class";
 
-export function useClassContests() {
-  const [classContests, setClassContests] = useState<ClassContestAssignment[]>(
-    []
-  );
-  const [loading, setLoading] = useState(false);
+const useClassContests = (classId: string | undefined) => {
+  const [contests, setContests] = useState<ClassContestAssignment[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchClassContests = useCallback(async () => {
+  useEffect(() => {
+    if (!classId) {
+      setContests([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
     setLoading(true);
     setError(null);
-    try {
-      const data = await getAllClassContestsApi();
-      setClassContests(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to fetch class contests");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    getContestsForClassApi(classId)
+      .then(setContests)
+      .catch((e) => setError(e.message || "Failed to fetch contests"))
+      .finally(() => setLoading(false));
+  }, [classId]);
 
-  useEffect(() => {
-    fetchClassContests();
-  }, [fetchClassContests]);
+  return { contests, loading, error };
+};
 
-  return {
-    classContests,
-    loading,
-    error,
-    fetchClassContests,
-    setClassContests,
-  };
-}
+export default useClassContests;
