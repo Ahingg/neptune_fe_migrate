@@ -60,6 +60,14 @@ const App: React.FC = () => {
                             path="/class/:classId/contest/:contestId/leaderboard"
                             element={<LeaderboardPage />}
                         />
+                        <Route
+                            path="/contest/global/:contestId"
+                            element={<ContestCasesPage />}
+                        />
+                        <Route
+                            path="/contest/:contestId/leaderboard"
+                            element={<LeaderboardPage />}
+                        />
                     </Route>
                     <Route
                         element={<ProtectedRoute allowedRoles={['Admin']} />}

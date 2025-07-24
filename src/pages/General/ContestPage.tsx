@@ -108,7 +108,7 @@ const ContestPage: React.FC = () => {
     const handleModalClose = () => {
         setShowModal(false);
         setEditContest(null);
-        setFeedback('');
+        // setFeedback('');
     };
     const handleModalSubmit = async (formData: any, isEdit: boolean, contestId?: string) => {
         setModalLoading(true);
@@ -126,6 +126,8 @@ const ContestPage: React.FC = () => {
                 name: formData.name,
                 description: formData.description,
                 scope: formData.scope,
+                start_time: formData.start_time,
+                end_time: formData.end_time
             });
             debugMsg = 'Assigning cases to contest...';
             // 2. Assign cases

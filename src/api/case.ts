@@ -4,6 +4,7 @@ import type { Case, Testcase } from "../types/case";
 
 export const getCases = async (): Promise<Case[]> => {
   const res = await axiosClient.get("/api/cases");
+  console.log(res.data) 
   return res.data;
 };
 
