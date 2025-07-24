@@ -25,6 +25,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                 <div className="mt-4 text-sm text-blue-700 bg-base-200 rounded-full px-4 py-1 font-semibold inline-block">
                     {semester ? semester.description : 'Loading semester...'}
                 </div>
+                
             </div>
 
             <div className="p-8">
@@ -37,7 +38,8 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                         {enrollments.map((enrollment) => (
                             <ClassCard
                                 key={enrollment.class_transaction_id}
-                                enrollment={enrollment}
+                                class_name={enrollment.class_name}
+                                class_transaction_id={enrollment.class_transaction_id}
                             />
                         ))}
                     </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import FormInput from '../../components/forms/FormInput';
 import AuthCard from '../../components/cards/AuthCard';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 const LoginPage: React.FC = () => {
@@ -10,8 +10,12 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState('');
 
     // Using the modern auth hook based on Jotai
-    const { login, loading, error, clearError } = useAuth();
+    const { login, loading, error, clearError, isAuthenticated } = useAuth();
     const navigate = useNavigate();
+
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

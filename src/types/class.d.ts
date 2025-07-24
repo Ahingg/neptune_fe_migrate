@@ -18,7 +18,6 @@ interface Class {
   semester_id: string;
   course_outline_id: string;
   class_code: string;
-  class_name?: string;
   students?: UserProfile[];
   assistants?: UserProfile[];
 }

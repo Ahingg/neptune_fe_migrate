@@ -59,9 +59,9 @@ const useLeaderboard = (classId: string | undefined, contestId: string | undefin
 };
 
 const LecturerLeaderboardPage: React.FC = () => {
-    const { classes, loading: classesLoading, error: classesError } = useLecturerClasses();
+    const { classes, loading: classesLoading } = useLecturerClasses();
     const [selectedClassId, setSelectedClassId] = useState<string | undefined>();
-    const { contests, loading: contestsLoading, error: contestsError } = useClassContests(selectedClassId);
+    const { contests, loading: contestsLoading } = useClassContests(selectedClassId);
     const [selectedContestId, setSelectedContestId] = useState<string | undefined>();
     const { leaderboard, cases, loading: leaderboardLoading, error: leaderboardError } = useLeaderboard(selectedClassId, selectedContestId);
 
