@@ -8,7 +8,6 @@ const DEFAULT_COURSE_ID = '09a7b352-1f11-ec11-90f0-d8d385fce79e'; // Algorithm a
 
 const ClassPage: React.FC = () => {
     const [semesters, setSemesters] = useState<Semester[]>([]);
-    const [currentSemester, setCurrentSemester] = useState<Semester | null>(null);
     const [selectedSemester, setSelectedSemester] = useState<string>('');
     const [classes, setClasses] = useState<Class[]>([]);
     const [selectedClassId, setSelectedClassId] = useState<string>('');
@@ -25,7 +24,6 @@ const ClassPage: React.FC = () => {
                 getCurrentSemesterApi(),
             ]);
             setSemesters(all);
-            setCurrentSemester(current);
             setSelectedSemester(current.semester_id);
             setLoading(false);
         };

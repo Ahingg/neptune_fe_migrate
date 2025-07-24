@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { createCasePdfFileUrl } from '../../utils/urlMaker';
+import SubmissionHistory from './SubmissionHistory';
 import type { Case } from '../../types/case';
 
 interface CaseDisplayProps {
     selectedCase: Case | null;
+    contestId?: string;
+    classId?: string;
 }
 
-const CaseDisplay: React.FC<CaseDisplayProps> = ({ selectedCase }) => {
+const CaseDisplay: React.FC<CaseDisplayProps> = ({
+    selectedCase,
+    contestId,
+    classId,
+}) => {
     const [activeTab, setActiveTab] = useState<'description' | 'history'>(
         'description'
     );
 
     if (!selectedCase) {
         return (
-            <div className="flex items-center justify-center h-3/5 bg-base-300 border border-gray-600 rounded-lg p-8">
+            <div className="flex items-center justify-center h-full bg-base-300 border border-gray-600 rounded-lg p-8">
                 <p className="text-gray-500">
                     Select a case to view its details.
                 </p>
@@ -22,8 +29,8 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({ selectedCase }) => {
     }
 
     return (
-        <div className="bg-base-300 rounded-lg shadow-inner border border-gray-600 h-3/5">
-            <div className="p-6 border-b border-gray-200">
+        <div className="bg-base-300 rounded-lg shadow-inner border border-gray-600 h-full">
+            <div className="p-6 border-b border-gray-500/20">
                 <h2 className="text-2xl font-bold text-blue-600">
                     {selectedCase.problem_code}. {selectedCase.name}
                 </h2>
@@ -35,8 +42,8 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({ selectedCase }) => {
                         role="tab"
                         className={`tab ${
                             activeTab === 'description'
-                                ? 'tab-active border border-b-blue-500'
-                                : ''
+                                ? 'tab-active bg-base-100 text-blue-600'
+                                : 'text-gray-600'
                         }`}
                         onClick={() => setActiveTab('description')}
                     >
@@ -44,10 +51,10 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({ selectedCase }) => {
                     </a>
                     <a
                         role="tab"
-                        className={`tab text-blue-500 ${
+                        className={`tab ${
                             activeTab === 'history'
-                                ? 'tab-active border border-b-blue-500 '
-                                : ''
+                                ? 'tab-active bg-base-100 text-blue-600'
+                                : 'text-gray-600'
                         }`}
                         onClick={() => setActiveTab('history')}
                     >
@@ -59,7 +66,7 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({ selectedCase }) => {
             <div className="p-6">
                 {activeTab === 'description' && (
                     <div>
-                        <p className="text-sm text-gray-600 mb-4 whitespace-pre-wrap">
+                        <p className="text-sm text-gray-700 mb-4 whitespace-pre-wrap">
                             {selectedCase.description}
                         </p>
                         <div className="flex flex-wrap gap-2 my-4">
@@ -85,12 +92,11 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({ selectedCase }) => {
                     </div>
                 )}
                 {activeTab === 'history' && (
-                    <div className="text-center p-8 text-gray-500">
-                        <p>
-                            Your submission history for this case will be shown
-                            here.
-                        </p>
-                    </div>
+                    <SubmissionHistory
+                        contestId={contestId}
+                        classId={classId}
+                        caseId={selectedCase.case_id}
+                    />
                 )}
             </div>
         </div>

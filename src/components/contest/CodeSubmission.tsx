@@ -47,7 +47,7 @@ const CodeSubmission: React.FC<CodeSubmissionProps> = ({
     };
 
     return (
-        <div className="p-6 bg-base-300 rounded-lg shadow-inner border border-gray-600  h-4/5">
+        <div className="p-6 bg-base-300 rounded-lg shadow-inner border border-gray-800  h-4/5">
             <h2 className="text-2xl font-bold text-blue-600 mb-4">
                 Submit Solution
             </h2>

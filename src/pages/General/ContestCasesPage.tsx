@@ -2,9 +2,11 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSubmission } from '../../hooks/useSubmission';
 import CaseDisplay from '../../components/contest/CaseDisplay';
-import CodeSubmission from '../../components/contest/CodeSubmission';
+import SubmissionWorkspace from '../../components/contest/SubmissionWorkspace';
+import BackButton from '../../components/button/BackButton';
 import { useContestDetails } from '../../hooks/useContestDetail';
-import SubmissionResultDisplay from '../../components/contest/SubmissionResultDisplay';
+import MyFullLeaderboardRow from '../../components/leaderboard/MyLeaderboardRow';
+import type { Case } from '../../types/case';
 
 const ContestCasesPage: React.FC = () => {
     const { contestId, classId } = useParams<{
@@ -16,18 +18,10 @@ const ContestCasesPage: React.FC = () => {
         cases,
         loading: loadingContest,
     } = useContestDetails(contestId);
-    const {
-        submit,
-        isSubmitting,
-        submissionError,
-        latestUpdate,
-        isJudging,
-        judgingError,
-    } = useSubmission();
+    const submissionProps = useSubmission(contestId, cases);
 
     const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
 
-    // Set the first case as selected by default once they load
     useEffect(() => {
         if (cases.length > 0 && !selectedCaseId) {
             setSelectedCaseId(cases[0].case_id);
@@ -35,12 +29,12 @@ const ContestCasesPage: React.FC = () => {
     }, [cases, selectedCaseId]);
 
     const selectedCase = useMemo(() => {
-        return cases.find((c) => c.case_id === selectedCaseId) || null;
+        return cases.find((c: Case) => c.case_id === selectedCaseId) || null;
     }, [cases, selectedCaseId]);
 
     if (loadingContest) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center bg-base-100">
                 <span className="loading loading-spinner loading-lg"></span>
             </div>
         );
@@ -50,56 +44,54 @@ const ContestCasesPage: React.FC = () => {
         <>
             <main className="p-4 sm:p-6 lg:p-8 min-h-screen">
                 <div className="max-w-screen-2xl mx-auto space-y-6">
-                    <h1 className="text-3xl font-bold text-blue-700">
-                        {contest?.name}
-                    </h1>
+                    <div className="flex justify-between items-center">
+                        <h1 className="text-3xl font-bold text-blue-700">
+                            {contest?.name}
+                        </h1>
+                        <BackButton />
+                    </div>
 
-                    {/* {contestId && <MyLeaderboardRow contestId={contestId} />} */}
+                    {contestId && (
+                        <MyFullLeaderboardRow
+                            contestId={contestId}
+                            classId={classId}
+                        />
+                    )}
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {/* Left Column: Case Details */}
-                        <div className="space-y-4 h-screen">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                        {/* Left Column: Case Selection and Display */}
+                        <div className="space-y-4">
                             <select
                                 className="select select-bordered w-full"
                                 value={selectedCaseId || ''}
-                                onChange={(e) =>
+                                onChange={(e) => 
                                     setSelectedCaseId(e.target.value)
                                 }
                             >
                                 <option disabled value="">
                                     Select a case
                                 </option>
-                                {cases.map((c) => (
+                                {/* Using 'id' for the key and value for consistency */}
+                                {cases.map((c: Case) => (
                                     <option key={c.case_id} value={c.case_id}>
                                         {c.name}
                                     </option>
                                 ))}
                             </select>
-                            <CaseDisplay selectedCase={selectedCase} />
-                        </div>
-
-                        {/* Right Column: Submission and Results */}
-                        <div className="space-y-4 h-screen">
-                            <CodeSubmission
-                                caseId={selectedCaseId}
+                            <CaseDisplay
+                                selectedCase={selectedCase}
                                 contestId={contestId}
                                 classId={classId}
-                                onSubmit={submit}
-                                isSubmitting={isSubmitting}
                             />
-                            {submissionError && (
-                                <div className="alert alert-error">
-                                    {submissionError}
-                                </div>
-                            )}
-                            {(isSubmitting || isJudging || latestUpdate) && (
-                                <SubmissionResultDisplay
-                                    latestUpdate={latestUpdate}
-                                    isJudging={isJudging}
-                                    judgingError={judgingError}
-                                />
-                            )}
                         </div>
+
+                        {/* Right Column: Submission Workspace */}
+                        <SubmissionWorkspace
+                            caseId={selectedCaseId}
+                            contestId={contestId}
+                            classId={classId}
+                            {...submissionProps}
+                        />
                     </div>
                 </div>
             </main>

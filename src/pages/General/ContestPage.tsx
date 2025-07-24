@@ -5,25 +5,25 @@ import ContestFormModal from '../../components/contest/ContestFormModal';
 import * as contestApi from '../../api/contest';
 import type { ClassContestAssignment } from '../../types/class';
 
-function getStatus(start: Date, end: Date): string {
-    const now = new Date();
-    if (now < start) return 'Not Started';
-    if (now > end) return 'Ended';
-    return 'Ongoing';
-}
+// function getStatus(start: Date, end: Date): string {
+//     const now = new Date();
+//     if (now < start) return 'Not Started';
+//     if (now > end) return 'Ended';
+//     return 'Ongoing';
+// }
 
-function formatDate(date: Date) {
-    return date.toLocaleString();
-}
+// function formatDate(date: Date) {
+//     return date.toLocaleString();
+// }
 
-function formatDuration(start: Date, end: Date) {
-    const ms = end.getTime() - start.getTime();
-    if (ms <= 0) return '-';
-    const mins = Math.floor(ms / 60000);
-    const hours = Math.floor(mins / 60);
-    const remMins = mins % 60;
-    return hours > 0 ? `${hours}h ${remMins}m` : `${remMins}m`;
-}
+// function formatDuration(start: Date, end: Date) {
+//     const ms = end.getTime() - start.getTime();
+//     if (ms <= 0) return '-';
+//     const mins = Math.floor(ms / 60000);
+//     const hours = Math.floor(mins / 60);
+//     const remMins = mins % 60;
+//     return hours > 0 ? `${hours}h ${remMins}m` : `${remMins}m`;
+// }
 
 // Helper to convert datetime-local to ISO string
 function toISOStringWithTZ(local: string) {
@@ -38,7 +38,6 @@ const ContestPage: React.FC = () => {
     const [editContest, setEditContest] = useState<Contest | null>(null);
     const [feedback, setFeedback] = useState('');
     const [modalLoading, setModalLoading] = useState(false);
-    const [assignmentsMap, setAssignmentsMap] = useState<Record<string, ClassContestAssignment[]>>({});
     const [assignmentsLoading, setAssignmentsLoading] = useState(false);
 
     // Fetch class assignments for each contest after contests are loaded
@@ -55,7 +54,6 @@ const ContestPage: React.FC = () => {
                     }
                 })
             );
-            setAssignmentsMap(map);
             setAssignmentsLoading(false);
         };
         if (contests.length > 0) fetchAssignments();
@@ -140,9 +138,9 @@ const ContestPage: React.FC = () => {
                         <button className="btn btn-outline btn-neutral text-gray-800 border-gray-700 hover:bg-gray-800 hover:text-white" onClick={handleAdd}>+ Add New Contest</button>
                     </div>
                 </div>
-                {feedback && <div className="mb-2 text-green-700 text-gray-800">{feedback}</div>}
+                {feedback && <div className="mb-2 text-green-700">{feedback}</div>}
                 {(loading || assignmentsLoading) && <div className="text-gray-800">Loading...</div>}
-                {error && <div className="text-red-700 text-gray-800">{error}</div>}
+                {error && <div className="text-red-700">{error}</div>}
                 <div className="overflow-x-auto">
                     <table className="table w-full text-gray-800">
                         <thead>

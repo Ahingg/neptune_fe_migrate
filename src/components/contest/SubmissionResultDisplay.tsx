@@ -1,5 +1,6 @@
 import { CheckCircle } from 'lucide-react';
 import React from 'react';
+import type { SubmissionStatus } from '../../types/submission';
 
 
 interface SubmissionResultDisplayProps {
@@ -16,7 +17,7 @@ const getStatusColor = (status: SubmissionStatus | string): string => {
         case 'Time Limit Exceeded':
         case 'Memory Limit Exceeded':
         case 'Runtime Error':
-            return 'bg-red-100 text-red-700';
+            return 'bg-red-700 text-red-100';
         case 'Compile Error':
             return 'bg-yellow-100 text-yellow-700';
         case 'Judging':
@@ -39,6 +40,7 @@ const VerdictRow: React.FC<{ result: TestCaseJudgingResult }> = ({
         >
             {result.verdict}
         </td>
+        <td className='font-mono'>{result.input}</td>
         <td className="font-mono text-right">{result.time_ms} ms</td>
         <td className="font-mono text-right">{result.memory_kb} KB</td>
     </tr>
@@ -51,7 +53,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
 }) => {
     if (isJudging && !latestUpdate) {
         return (
-            <div className="p-6 bg-base-300 rounded-lg shadow-inner border border-gray-200 text-center">
+            <div className="p-6 bg-base-300 rounded-lg shadow-inner border border-gray-800 text-center">
                 <span className="loading loading-dots loading-md text-blue-500"></span>
                 <p className="text-blue-600 font-semibold mt-2">
                     Judging your submission...
@@ -80,7 +82,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
             ...latestUpdate.testcases.map((tc) => tc.memory_kb)
         );
         return (
-            <div className="p-6 bg-green-50 rounded-lg shadow-inner border border-green-200 text-green-800">
+            <div className="p-6 bg-green-300 rounded-lg shadow-inner border border-green-200 text-green-800">
                 
                 <div className="flex items-center gap-4">
                     <span className="material-icons text-3xl">
@@ -104,7 +106,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
 
     // Detailed view for other verdicts
     return (
-        <div className="p-6 rounded-lg shadow-inner border border-gray-200">
+        <div className="p-6 rounded-lg shadow-inner border border-gray-600">
             <div
                 className={`p-3 rounded-lg bg-base-300 font-bold text-lg text-center mb-4 ${getStatusColor(
                     latestUpdate.final_status
@@ -116,7 +118,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
             {latestUpdate.final_status === 'Compile Error' &&
                 latestUpdate.testcases[0]?.stderr && (
                     <div className="mb-4">
-                        <h3 className="font-semibold text-gray-700">
+                        <h3 className="font-semibold text-blue-700">
                             Compiler Message:
                         </h3>
                         <pre className="bg-gray-800 text-white p-3 rounded-md text-xs overflow-x-auto">
@@ -134,6 +136,7 @@ const SubmissionResultDisplay: React.FC<SubmissionResultDisplayProps> = ({
                         <tr>
                             <th className="text-center">#</th>
                             <th>Verdict</th>
+                            <th>Input</th>
                             <th className="text-right">Time</th>
                             <th className="text-right">Memory</th>
                         </tr>
