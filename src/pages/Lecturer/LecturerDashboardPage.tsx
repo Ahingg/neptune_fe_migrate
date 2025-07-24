@@ -38,10 +38,10 @@ const LecturerDashboardPage: React.FC = () => {
                         {classes.map(cls => (
                             <ActionCard
                                 key={cls.class_transaction_id}
-                                to={`/lecturer/class/${cls.class_transaction_id}`}
+                                to="/lecturer/classes"
                                 icon="class"
                                 title={cls.class_code}
-                                description={cls.class_name}
+                                description={cls.class_name || 'No name'}
                             />
                         ))}
                         {(!loading && classes.length === 0) && (
@@ -54,10 +54,10 @@ const LecturerDashboardPage: React.FC = () => {
                     <h3 className="text-xl font-bold text-blue-500 mb-4 text-left">Quick Actions</h3>
                     <div className="flex flex-col gap-6">
                         <ActionCard
-                            to="/lecturer/dashboard"
+                            to="/lecturer/classes"
                             icon="class"
                             title="Classes"
-                            description="View your assistant classes"
+                            description="View your assigned classes"
                         />
                         <ActionCard
                             to="/contests"

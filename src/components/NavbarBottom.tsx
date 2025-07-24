@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { isAdminAtom, isAuthenticatedAtom, isStudentAtom } from "../store/auth";
+import { isAdminAtom, isAuthenticatedAtom, isStudentAtom, isLecturerAtom, isAssistantAtom } from "../store/auth";
 import { useAuth } from "../hooks/useAuth";
 import { NavLink } from "react-router-dom";
 
@@ -7,14 +7,15 @@ import { NavLink } from "react-router-dom";
 type NavLinkInfo = {
     to: string;
     label: string;
-    roles?: Array<'admin' | 'student' | 'lecturer' | 'assistant'>;
+    roles?: Array<'admin' | 'student' | 'Lecturer' | 'Assistant'>;
 };
 const allNavLinks: NavLinkInfo[] = [
-    { to: '/', label: 'Dashboard', roles: ['admin', 'student', 'lecturer', 'assistant'] },
+    { to: '/', label: 'Dashboard', roles: ['admin', 'student'] },
     { to: '/contests', label: 'Contests', roles: ['admin', 'student'] },
     { to: '/cases', label: 'Cases', roles: ['admin'] },
     { to: '/classes', label: 'Classes', roles: ['admin'] },
-    { to: '/lecturer/dashboard', label: 'My Classes', roles: ['lecturer', 'assistant'] },
+    { to: '/lecturer/dashboard', label: 'Dashboard', roles: ['Lecturer', 'Assistant'] },
+    { to: '/lecturer/classes', label: 'Classes', roles: ['Lecturer', 'Assistant'] },
     { to: '/submission', label: 'Submission', roles: ['student'] },
     { to: '/leaderboard', label: 'Leaderboard', roles: ['student', 'admin'] },
 ];
@@ -24,6 +25,8 @@ const allNavLinks: NavLinkInfo[] = [
 const NavbarBottom: React.FC = () => {
     const isAdmin = useAtomValue(isAdminAtom);
     const isStudent = useAtomValue(isStudentAtom);
+    const isLecturer = useAtomValue(isLecturerAtom);
+    const isAssistant = useAtomValue(isAssistantAtom);
     const isAuthenticated = useAtomValue(isAuthenticatedAtom);
 
     const { logout } = useAuth();
@@ -32,6 +35,8 @@ const NavbarBottom: React.FC = () => {
         if (!link.roles) return true;
         if (isAdmin && link.roles.includes('admin')) return true;
         if (isStudent && link.roles.includes('student')) return true;
+        if (isLecturer && link.roles.includes('Lecturer')) return true;
+        if (isAssistant && link.roles.includes('Assistant')) return true;
         return false;
     });
     const handleLogout = async () => {

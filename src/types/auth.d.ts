@@ -4,7 +4,7 @@ interface User {
   id: string;
   username: string;
   name: string;
-  role: "Admin" | "Student" | "Assistant";
+  role: "Admin" | "Student" | "Assistant" | "Lecturer";
   enrollments?: UserEnrollmentDetail[];
 }
 

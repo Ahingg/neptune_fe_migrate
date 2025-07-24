@@ -12,7 +12,7 @@ import CasePage from './pages/General/CasePage'; // fallback for eager load if n
 import ContestPage from './pages/General/ContestPage';
 import ClassPage from './pages/General/ClassPage';
 import LecturerDashboardPage from './pages/Lecturer/LecturerDashboardPage';
-import LecturerClassPage from './pages/Lecturer/LecturerClassPage';
+import LecturerClassesPage from './pages/Lecturer/LecturerClassesPage';
 
 // todo: Adjust Unauthorized and Not Found Page
 const UnauthorizedPage: React.FC = () => (
@@ -52,7 +52,7 @@ const App: React.FC = () => {
                     </Route>
                     <Route element={<ProtectedRoute allowedRoles={['Lecturer', 'Assistant']} />}>
                         <Route path="/lecturer/dashboard" element={<LecturerDashboardPage />} />
-                        <Route path="/lecturer/class/:classId" element={<LecturerClassPage />} />
+                        <Route path="/lecturer/classes" element={<LecturerClassesPage />} />
                     </Route>
                     <Route
                         path="*"
