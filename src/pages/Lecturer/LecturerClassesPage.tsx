@@ -181,9 +181,7 @@ const ClassDetailContent: React.FC<{ selectedClass: Class }> = ({ selectedClass 
                                 students={(selectedClass.students || []).map(s =>
                                     s.name && s.username
                                         ? s
-                                        : s.User
-                                            ? { user_id: s.User.ID, name: s.User.Name, username: s.User.Username }
-                                            : { user_id: '', name: '', username: '' }
+                                        : { user_id: s.user_id || '', name: s.name || '', username: s.username || '' }
                                 )}
                             />
                         </div>

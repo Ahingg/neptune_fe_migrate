@@ -32,7 +32,7 @@ const AdminLeaderboardPage: React.FC = () => {
 
     return (
         <div className="container mx-auto p-6">
-            <h1 className="text-3xl font-extrabold mb-8 text-blue-800 drop-shadow">Leaderboard (Admin)</h1>
+            <h1 className="text-3xl font-extrabold mb-8 text-blue-800 drop-shadow">Leaderboard</h1>
             {/* Filters Row */}
             <div className="flex flex-col md:flex-row gap-6 mb-8">
                 {/* Course Dropdown */}
@@ -70,7 +70,7 @@ const AdminLeaderboardPage: React.FC = () => {
                         <option value="" disabled>Select a class</option>
                         {classes.map((cls: any) => (
                             <option key={cls.class_transaction_id} value={cls.class_transaction_id} className="text-blue-800 bg-white">
-                                {cls.class_code} - {cls.class_name || 'No name'}
+                                {cls.class_code}
                             </option>
                         ))}
                     </select>

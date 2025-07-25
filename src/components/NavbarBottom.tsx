@@ -11,7 +11,7 @@ type NavLinkInfo = {
 };
 const allNavLinks: NavLinkInfo[] = [
     { to: '/', label: 'Dashboard', roles: ['admin', 'student'] },
-    { to: '/contests', label: 'Contests', roles: ['admin', 'student'] },
+    { to: '/contests', label: 'Contests', roles: ['admin'] },
     { to: '/cases', label: 'Cases', roles: ['admin'] },
     { to: '/classes', label: 'Classes', roles: ['admin'] },
     { to: '/lecturer/dashboard', label: 'Dashboard', roles: ['Lecturer', 'Assistant'] },
