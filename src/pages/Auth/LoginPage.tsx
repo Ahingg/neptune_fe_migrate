@@ -7,6 +7,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [formError, setFormError] = useState<string | null>(null);
 
     // Using the modern auth hook based on Jotai
     const { login, loading, error, clearError, isAuthenticated } = useAuth();
@@ -19,9 +20,9 @@ const LoginPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (error) clearError?.(); // Clear previous errors if the function exists
+        setFormError(null);
         if (!username || !password) {
-            // console.log("nono");
-            // Send Error Message
+            setFormError("Username and password are required.");
             return;
         }
 
@@ -66,7 +67,7 @@ const LoginPage: React.FC = () => {
                         helperText="Your BIMAY or admin account password"
                     />
 
-                    {error && (
+                    {(formError || error) && (
                         <div
                             role="alert"
                             className="alert alert-error text-sm p-2"
@@ -74,7 +75,7 @@ const LoginPage: React.FC = () => {
                             <span className="material-icons text-base">
                                 error
                             </span>
-                            <span>{error}</span>
+                            <span>{formError || error}</span>
                         </div>
                     )}
 
