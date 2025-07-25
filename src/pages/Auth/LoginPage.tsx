@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import FormInput from '../../components/forms/FormInput';
 import AuthCard from '../../components/cards/AuthCard';
@@ -8,28 +8,42 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [pendingRedirect, setPendingRedirect] = useState(false);
 
     // Using the modern auth hook based on Jotai
-    const { login, loading, error, clearError } = useAuth();
+    const { login, loading, error, clearError, user } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (error) clearError?.(); // Clear previous errors if the function exists
         if (!username || !password) {
-            // console.log("nono");
-            // Send Error Message
             return;
         }
 
         try {
             await login({ username, password });
-            navigate('/');
+            setPendingRedirect(true); // trigger redirect in effect
         } catch (err) {
             // Error state is already handled and set by the useAuth hook
             console.error('Login failed:', err);
         }
     };
+
+    useEffect(() => {
+        if (pendingRedirect && user) {
+            if (user.role === 'Admin') {
+                navigate('/dashboard');
+            } else if (user.role === 'Lecturer' || user.role === 'Assistant') {
+                navigate('/lecturer/dashboard');
+            } else if (user.role === 'Student') {
+                navigate('/');
+            } else {
+                navigate('/');
+            }
+            setPendingRedirect(false);
+        }
+    }, [pendingRedirect, user, navigate]);
 
     return (
         <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-blue-400 to-blue-600 relative overflow-hidden">

@@ -39,22 +39,20 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({
                 <div role="tablist" className="tabs tabs-boxed bg-base-300">
                     <a
                         role="tab"
-                        className={`tab ${
-                            activeTab === 'description'
+                        className={`tab ${activeTab === 'description'
                                 ? 'tab-active bg-base-100 text-blue-600'
                                 : 'text-gray-600'
-                        }`}
+                            }`}
                         onClick={() => setActiveTab('description')}
                     >
                         Problem
                     </a>
                     <a
                         role="tab"
-                        className={`tab ${
-                            activeTab === 'history'
+                        className={`tab ${activeTab === 'history'
                                 ? 'tab-active bg-base-100 text-blue-600'
                                 : 'text-gray-600'
-                        }`}
+                            }`}
                         onClick={() => setActiveTab('history')}
                     >
                         My Submissions
@@ -77,16 +75,17 @@ const CaseDisplay: React.FC<CaseDisplayProps> = ({
                             </div>
                         </div>
                         {selectedCase.pdf_file_url && (
-                            <a
-                                href={createCasePdfFileUrl(
-                                    selectedCase.pdf_file_url
-                                )}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn btn-sm btn-outline btn-primary"
-                            >
-                                View Problem PDF
-                            </a>
+                            <>
+                                {console.log('PDF URL:', createCasePdfFileUrl(selectedCase.pdf_file_url))}
+                                <a
+                                    href={createCasePdfFileUrl(selectedCase.pdf_file_url)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-sm btn-outline btn-primary"
+                                >
+                                    View Problem PDF
+                                </a>
+                            </>
                         )}
                     </div>
                 )}

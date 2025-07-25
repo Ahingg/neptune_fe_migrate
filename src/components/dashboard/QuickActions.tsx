@@ -8,12 +8,12 @@ const QuickActions: React.FC = () => {
                 Quick Actions
             </h3>
             <div className="flex flex-col gap-4">
-                <ActionCard
+                {/* <ActionCard
                     to="/contests"
                     icon="emoji_events"
                     title="Contests"
                     description="View and participate in contests"
-                />
+                /> */}
                 <ActionCard
                     to="/leaderboard"
                     icon="leaderboard"
