@@ -56,7 +56,7 @@ export const useSubmissionHistory = (
     // `setCache` is stable and won't cause re-runs.
   }, [contestId, classId, setCache]);
 
-  const submissions = cache[contestId || ""] || [];
-  console.log("Submission history for contest:", contestId, "is", submissions);
+  const submissions = cache[contestId || ''] || [];
+  // console.log('Submission history for contest:', contestId, 'is', submissions);
   return { submissions, loading, error };
 };

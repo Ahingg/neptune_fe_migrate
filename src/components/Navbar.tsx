@@ -12,12 +12,6 @@ const Navbar: React.FC = () => {
     const user = useAtomValue(userAtom);
     const isAuthenticated = useAtomValue(isAuthenticatedAtom);
 
-
-
-
-
-
-
     return (
         // Main container now uses a column layout
         <div className="bg-blue-50 px-8 py-4 gap-4 z-15 relative">

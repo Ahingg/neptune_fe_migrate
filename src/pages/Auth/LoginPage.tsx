@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import FormInput from '../../components/forms/FormInput';
 import AuthCard from '../../components/cards/AuthCard';
-import { useNavigate } from 'react-router-dom';
-
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     // Using the modern auth hook based on Jotai
-    const { login, loading, error, clearError } = useAuth();
+    const { login, loading, error, clearError, isAuthenticated } = useAuth();
     const navigate = useNavigate();
+
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,7 +35,7 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-blue-400 to-blue-600 relative overflow-hidden">
+        <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 relative overflow-hidden">
             <link
                 href="https://fonts.googleapis.com/icon?family=Material+Icons"
                 rel="stylesheet"

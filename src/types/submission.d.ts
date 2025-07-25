@@ -53,6 +53,9 @@ type SubmissionStatus =
     | 'Internal Error';
 
 export interface SubmissionHistoryItem {
+    user_id: string | null; // User ID of the student
+    username: string | null; // Username of the student
+    name: string | null; // Full name of the student
     submission_id: string;
     contest_id: string;
     case_id: string;

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { getClassByIdApi, getContestsForClassApi } from '../api/class';
 import type { Class, ClassContestAssignment } from '../types/class';
+import type { UserProfile } from '../types/auth';
 
 interface UseClassDetailsResult {
   classData: Class | null;
@@ -39,6 +40,9 @@ export const useClassDetails = (
         ]);
 
         setClassData(classResult);
+        if (classResult && Array.isArray(classResult.students)) {
+          classResult.students.sort((a: UserProfile, b: UserProfile) => a.name.localeCompare(b.name));
+        }
         setContests(contestsResult);
         setError(null);
       } catch (err: any) {

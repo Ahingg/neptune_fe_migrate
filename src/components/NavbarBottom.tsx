@@ -7,20 +7,19 @@ import { NavLink } from "react-router-dom";
 type NavLinkInfo = {
     to: string;
     label: string;
-    roles?: Array<'admin' | 'student' | 'Lecturer' | 'Assistant'>;
+    roles?: Array<'Admin' | 'student' | 'Lecturer' | 'Assistant'>;
 };
 const allNavLinks: NavLinkInfo[] = [
-    { to: '/', label: 'Dashboard', roles: ['admin', 'student'] },
-    { to: '/contests', label: 'Contests', roles: ['admin'] },
-    { to: '/cases', label: 'Cases', roles: ['admin'] },
-    { to: '/classes', label: 'Classes', roles: ['admin'] },
-    { to: '/lecturer/dashboard', label: 'Dashboard', roles: ['Lecturer', 'Assistant'] },
+    { to: '/', label: 'Dashboard', roles: ['Admin', 'student','Assistant'] },
+    { to: '/contests', label: 'Contests', roles: ['Admin', 'student'] },
+    { to: '/cases', label: 'Cases', roles: ['Admin'] },
+    { to: '/classes', label: 'Classes', roles: ['Admin'] },
     { to: '/lecturer/classes', label: 'Classes', roles: ['Lecturer', 'Assistant'] },
     { to: '/lecturer/contests', label: 'Contests', roles: ['Lecturer', 'Assistant'] },
     { to: '/lecturer/submissions', label: 'Submissions', roles: ['Lecturer', 'Assistant'] },
     { to: '/lecturer/leaderboard', label: 'Leaderboard', roles: ['Lecturer', 'Assistant'] },
     { to: '/submission', label: 'Submission', roles: ['student'] },
-    { to: '/leaderboard', label: 'Leaderboard', roles: ['student', 'admin'] },
+    { to: '/leaderboard', label: 'Leaderboard', roles: ['student', 'Admin'] },
 ];
 
 
@@ -36,7 +35,7 @@ const NavbarBottom: React.FC = () => {
 
     const visibleNavLinks = allNavLinks.filter((link) => {
         if (!link.roles) return true;
-        if (isAdmin && link.roles.includes('admin')) return true;
+        if (isAdmin && link.roles.includes('Admin')) return true;
         if (isStudent && link.roles.includes('student')) return true;
         if (isLecturer && link.roles.includes('Lecturer')) return true;
         if (isAssistant && link.roles.includes('Assistant')) return true;

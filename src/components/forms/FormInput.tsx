@@ -21,11 +21,11 @@ const FormInput: React.FC<FormInputProps> = ({
 }) => {
     return (
         <div>
-            <label className="input bg-slate-200 focus:border-1  text-slate-900 items-center gap-2">
+            <label className="input focus:border-1 text-gray-100 items-center gap-2">
                 <span className="material-icons text-blue-500">{icon}</span>
                 <input
                     type={type}
-                    className="grow text-slate-600 "
+                    className="grow text-gray-100 "
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}

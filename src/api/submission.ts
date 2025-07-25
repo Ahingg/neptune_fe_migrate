@@ -47,3 +47,49 @@ export const getSubmissionsForContestApi = async (
   const response = await axiosClient.get<SubmissionHistoryItem[]>(url);
   return response.data || [];
 };
+
+/**
+ * Fetches the source code for a single submission.
+ * @param submissionId The ID of the submission.
+ * @returns A promise that resolves to the source code as a string.
+ */
+export const getSubmissionCodeApi = async (
+    submissionId: string
+): Promise<string> => {
+    const response = await axiosClient.get(
+        `/api/submissions/${submissionId}/code`,
+        { responseType: 'text' }
+    );
+    return response.data;
+};
+
+export const downloadSubmissionCodeApi = async (
+    submissionId: string
+): Promise<void> => {
+    const response = await axiosClient.get(
+        `/api/submissions/${submissionId}/download`,
+        {
+            responseType: 'blob', // important: handle binary data
+        }
+    );
+
+    const blob = new Blob([response.data], { type: 'application/zip' });
+
+    // Try to extract filename from Content-Disposition header
+    const disposition = response.headers['content-disposition'];
+    const match = disposition?.match(/filename="(.+)"/);
+    console.log('Content-Disposition:', response);
+    const filename = match?.[1] ?? `submission_${submissionId}.zip`;
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.style.display = 'none';
+
+    document.body.appendChild(link);
+    link.click();
+
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+};
