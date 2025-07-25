@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
 
     return (
         // Main container now uses a column layout
-        <div className="bg-blue-50 px-8 py-4 gap-4 z-15 relative">
+        <div className="bg-white px-8 py-4 gap-4 z-15 relative">
             {/* Upper Section: Logo and User Info */}
             <div className="w-full flex justify-between items-center">
                 {/* Upper Left: Logo */}
