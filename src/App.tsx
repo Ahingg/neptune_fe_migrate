@@ -24,6 +24,7 @@ import UnauthorizedPage from './pages/General/UnauthorizedPage';
 
 const App: React.FC = () => {
     const location = useLocation();
+    // These pages should not have the main Navbar
     const noNavRoutes = ['/login'];
     const showNav = !noNavRoutes.includes(location.pathname)
 
@@ -77,8 +78,6 @@ const App: React.FC = () => {
                         />
                     </Route>
 
-                    {/* ADMIN PROTECTED ROUTES */}
-
                     {/* Admin protected routes */}
                     <Route
                         element={<ProtectedRoute allowedRoles={['Admin']} />}
@@ -113,8 +112,6 @@ const App: React.FC = () => {
                         />
                     </Route>
 
-                    {/* LECTURER & ASSISTANT PROTECTED ROUTES */}
-
                     {/* Lecturer/Assistant protected routes */}
                     <Route
                         element={
@@ -145,8 +142,6 @@ const App: React.FC = () => {
                             element={<LecturerSubmissionDetailPage />}
                         />
                     </Route>
-
-                    <Route path="*" element={<NotFoundPage />} />
 
                     {/* Use the new NotFoundPage component for any unmatched route */}
                     <Route path="*" element={<NotFoundPage />} />
