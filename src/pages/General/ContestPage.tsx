@@ -45,11 +45,12 @@ const ContestPage: React.FC = () => {
         contestId?: string
     ) => {
         const apiCall = async () => {
+            let contest;
             if (isEdit && contestId) {
-                // This is a simplified update. A real implementation might be more complex.
-                await contestApi.deleteContest(contestId);
+                contest = await contestApi.updateContest(contestId, formData);
+            } else {
+                contest = await contestApi.createContest(formData);
             }
-            const contest = await contestApi.createContest(formData);
             // Assign cases to contest for both global and class
             await contestApi.assignCasesToContest(
                 contest.id,
