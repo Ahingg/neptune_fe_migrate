@@ -22,10 +22,8 @@ import UnauthorizedPage from './pages/General/UnauthorizedPage';
 
 const App: React.FC = () => {
     const location = useLocation();
-    const noNavRoutes = ['/login', '/unauthorized'];
-    const showNav =
-        !noNavRoutes.includes(location.pathname) &&
-        !location.pathname.startsWith('/404');
+    const noNavRoutes = ['/login'];
+    const showNav = !noNavRoutes.includes(location.pathname)
 
     return (
         <>
@@ -38,12 +36,15 @@ const App: React.FC = () => {
             <main>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
+
+                    {/* Use the new UnauthorizedPage component */}
                     <Route
                         path="/unauthorized"
                         element={<UnauthorizedPage />}
                     />
 
                     {/* GENERAL PROTECTED ROUTES */}
+                    {/* Main protected routes */}
                     <Route element={<ProtectedRoute />}>
                         {/* The main '/' route now uses the redirector */}
                         <Route path="/" element={<DashboardRedirector />} />
@@ -71,6 +72,8 @@ const App: React.FC = () => {
                     </Route>
 
                     {/* ADMIN PROTECTED ROUTES */}
+
+                    {/* Admin protected routes */}
                     <Route
                         element={<ProtectedRoute allowedRoles={['Admin']} />}
                     >
@@ -105,6 +108,8 @@ const App: React.FC = () => {
                     </Route>
 
                     {/* LECTURER & ASSISTANT PROTECTED ROUTES */}
+
+                    {/* Lecturer/Assistant protected routes */}
                     <Route
                         element={
                             <ProtectedRoute
@@ -136,12 +141,16 @@ const App: React.FC = () => {
                     </Route>
 
                     <Route path="*" element={<NotFoundPage />} />
+
+                    {/* Use the new NotFoundPage component for any unmatched route */}
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </main>
         </>
     );
 };
 
+// The BrowserRouter wrapper remains the same
 const AppWrapper: React.FC = () => (
     <BrowserRouter>
         <App />
