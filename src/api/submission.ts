@@ -37,14 +37,15 @@ export const getSubmissionsForContestApi = async (
   contestId: string,
   classTransactionId?: string
 ): Promise<SubmissionHistoryItem[]> => {
-  let url = `/api/submission/all/${contestId}`;
-
-  // Conditionally add the class transaction ID as a query parameter
+  let urlBase = `/api/submission/`;
   if (classTransactionId) {
-    url += `?class_transaction_id=${classTransactionId}`;
+    urlBase += `all/${contestId}`;
+    urlBase += `?class_transaction_id=${classTransactionId}`;
   }
-
-  const response = await axiosClient.get<SubmissionHistoryItem[]>(url);
+  else {
+    urlBase += `${contestId}`;
+  }
+  const response = await axiosClient.get<SubmissionHistoryItem[]>(urlBase);
   return response.data || [];
 };
 
