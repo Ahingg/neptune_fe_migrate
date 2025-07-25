@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useClasses } from '../../hooks/useClasses';
 import useCases from '../../hooks/useCases';
+import AdminModal from '../admin/AdminModal';
 import ClassSelector from '../adminContest/ClassSelector';
 import CaseSelector from '../adminContest/CaseSelector';
-import { X } from 'lucide-react';
+import { useCourse } from '../../hooks/useCourse';
 interface ContestFormModalProps {
     open: boolean;
     onClose: () => void;
@@ -25,7 +26,7 @@ const ContestFormModal: React.FC<ContestFormModalProps> = ({
 }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [scope, setScope] = useState('class');
+    const [scope, setScope] = useState<'class' | 'global'>('class');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
@@ -34,22 +35,21 @@ const ContestFormModal: React.FC<ContestFormModalProps> = ({
     const [selectedCourseId, setSelectedCourseId] = useState<string>(
         '09a7b352-1f11-ec11-90f0-d8d385fce79e'
     );
+    const {courseOptions} = useCourse()
 
     const {
         classes,
         loading: classesLoading,
-        courseOptions,
     } = useClasses(selectedCourseId);
     const { cases, loading: casesLoading } = useCases();
 
     useEffect(() => {
+        // Reset form state when modal opens or initial data changes
         if (initialData) {
             setName(initialData.name || '');
             setDescription(initialData.description || '');
             setScope(initialData.scope || 'class');
-            // Additional logic to populate fields for editing would go here
         } else {
-            // Reset form for new entry
             setName('');
             setDescription('');
             setScope('class');
@@ -64,18 +64,18 @@ const ContestFormModal: React.FC<ContestFormModalProps> = ({
     const handleSelectionChange = (
         id: string,
         isSelected: boolean,
-        setter: React.Dispatch<React.SetStateAction<string[]>>,
-        currentSelection: string[]
+        setter: React.Dispatch<React.SetStateAction<string[]>>
     ) => {
-        if (isSelected) {
-            setter([...currentSelection, id]);
-        } else {
-            setter(currentSelection.filter((currentId) => currentId !== id));
-        }
+        setter((prev) =>
+            isSelected
+                ? [...prev, id]
+                : prev.filter((currentId) => currentId !== id)
+        );
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError('');
         if (
             !name ||
             !scope ||
@@ -100,157 +100,129 @@ const ContestFormModal: React.FC<ContestFormModalProps> = ({
             start_time: new Date(startTime).toISOString(),
             end_time: new Date(endTime).toISOString(),
             case_ids: selectedCases,
-            // Only include class_ids if the scope is 'class'
             ...(scope === 'class' && { class_ids: selectedClasses }),
         };
-
         await onSubmit(formData, !!initialData, initialData?.id);
     };
 
-    if (!open) return null;
-
     return (
-        <div
-            className="fixed inset-0 bg-base-100/50 flex items-center justify-center z-50"
-            style={{ backdropFilter: 'blur(2px)' }}
+        <AdminModal
+            open={open}
+            onClose={onClose}
+            title={initialData ? 'Edit Contest' : 'Add New Contest'}
         >
-            <div
-                className="bg-base-100 text-gray-800 rounded-lg border border-gray-600 shadow-lg w-full max-w-lg flex flex-col"
-                style={{ maxHeight: '90vh' }}
-            >
-                <div className="p-6 border-b relative">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                {error && (
+                    <div className="alert alert-error text-sm">{error}</div>
+                )}
 
-                    <h2 className="text-xl font-bold text-blue-700">
-                        {initialData ? 'Edit Contest' : 'Add New Contest'}
-                    </h2>
-                    <button
-                        className="absolute top-4 right-4 btn btn-sm btn-ghost text-xl text-red-300"
-                        onClick={onClose}
-                    >
-                        <X/>
-                    </button>
+                <input
+                    className="input input-bordered bg-base-100"
+                    placeholder="Contest Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <textarea
+                    className="textarea textarea-bordered bg-base-100"
+                    placeholder="Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+                <select
+                    className="select select-bordered bg-base-100"
+                    value={scope}
+                    onChange={(e) =>
+                        setScope(e.target.value as 'class' | 'global')
+                    }
+                >
+                    <option value="class">Class Contest</option>
+                    <option value="global">Global Contest</option>
+                </select>
+
+                <div className="flex gap-4">
+                    <div className="flex-1 form-control">
+                        <label className="label">
+                            <span className="label-text">Start Time</span>
+                        </label>
+                        <input
+                            className="input input-bordered w-full bg-base-100"
+                            type="datetime-local"
+                            value={startTime}
+                            onChange={(e) => setStartTime(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex-1 form-control">
+                        <label className="label">
+                            <span className="label-text">End Time</span>
+                        </label>
+                        <input
+                            className="input input-bordered w-full bg-base-100"
+                            type="datetime-local"
+                            value={endTime}
+                            onChange={(e) => setEndTime(e.target.value)}
+                        />
+                    </div>
                 </div>
 
-                <form
-                    onSubmit={handleSubmit}
-                    className="p-6 flex-grow overflow-y-auto flex flex-col gap-4"
-                >
-                    {error && (
-                        <div className="alert alert-error text-sm">{error}</div>
-                    )}
-
-                    <input
-                        className="input input-bordered placeholder:text-blue-100/50 text-gray-100"
-                        placeholder="Contest Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <textarea
-                        className="textarea textarea-bordered placeholder:text-blue-100/50 text-gray-100"
-                        placeholder="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-
-                    <select
-                        className="select select-bordered text-blue-100/50"
-                        value={scope}
-                        onChange={(e) => setScope(e.target.value)}
-                    >
-                        <option value="class">Class Contest</option>
-                        <option value="global">Global Contest</option>
-                    </select>
-
-                    <div className="flex gap-4">
-                        <div className="flex-1">
-                            <label className="block text-xs mb-1">
-                                Start Time
-                            </label>
-                            <input
-                                className="input input-bordered w-full text-blue-100/50"
-                                type="datetime-local"
-                                value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <label className="block text-xs text-gray-500 mb-1">
-                                End Time
-                            </label>
-                            <input
-                                className="input input-bordered w-full text-gray-500"
-                                type="datetime-local"
-                                value={endTime}
-                                onChange={(e) => setEndTime(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Conditional Class Selector */}
-                    {scope === 'class' && (
-                        <div>
-                            <label className="block text-xs text-gray-500 mb-1">
+                {scope === 'class' && (
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text text-blue-500">
                                 Filter by Course
-                            </label>
-                            <select
-                                className="select select-bordered select-sm w-full mb-2 text-gray-500"
-                                value={selectedCourseId}
-                                onChange={(e) =>
-                                    setSelectedCourseId(e.target.value)
-                                }
-                            >
-                                {courseOptions.map((opt) => (
-                                    <option key={opt.id} value={opt.id}>
-                                        {opt.name}
-                                    </option>
-                                ))}
-                            </select>
-                            <ClassSelector
-                                classes={classes}
-                                loading={classesLoading}
-                                selectedClasses={selectedClasses}
-                                onChange={(id, selected) =>
-                                    handleSelectionChange(
-                                        id,
-                                        selected,
-                                        setSelectedClasses,
-                                        selectedClasses
-                                    )
-                                }
-                            />
-                        </div>
-                    )}
-
-                    <CaseSelector
-                        cases={cases}
-                        loading={casesLoading}
-                        selectedCases={selectedCases}
-                        onChange={(id, selected) =>
-                            handleSelectionChange(
-                                id,
-                                selected,
-                                setSelectedCases,
-                                selectedCases
-                            )
-                        }
-                    />
-
-                    <div className="pt-4 border-t mt-auto">
-                        <button
-                            className="btn btn-primary w-full bg-blue-500 hover:bg-blue-700 "
-                            type="submit"
-                            disabled={loading}
+                            </span>
+                        </label>
+                        <select
+                            className="select select-bordered select-sm w-full mb-2 bg-base-100"
+                            value={selectedCourseId}
+                            onChange={(e) =>
+                                setSelectedCourseId(e.target.value)
+                            }
                         >
-                            {loading
-                                ? 'Saving...'
-                                : initialData
-                                ? 'Update Contest'
-                                : 'Create Contest'}
-                        </button>
+                            {courseOptions.map((opt) => (
+                                <option key={opt.id} value={opt.id}>
+                                    {opt.name}
+                                </option>
+                            ))}
+                        </select>
+                        <ClassSelector
+                            classes={classes}
+                            loading={classesLoading}
+                            selectedClasses={selectedClasses}
+                            onChange={(id, selected) =>
+                                handleSelectionChange(
+                                    id,
+                                    selected,
+                                    setSelectedClasses
+                                )
+                            }
+                        />
                     </div>
-                </form>
-            </div>
-        </div>
+                )}
+
+                <CaseSelector
+                    cases={cases}
+                    loading={casesLoading}
+                    selectedCases={selectedCases}
+                    onChange={(id, selected) =>
+                        handleSelectionChange(id, selected, setSelectedCases)
+                    }
+                />
+
+                <div className="pt-4 border-t border-gray-600 mt-2">
+                    <button
+                        className="btn btn-primary w-full"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading
+                            ? 'Saving...'
+                            : initialData
+                            ? 'Update Contest'
+                            : 'Create Contest'}
+                    </button>
+                </div>
+            </form>
+        </AdminModal>
     );
 };
 

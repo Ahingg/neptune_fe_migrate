@@ -1,39 +1,37 @@
-import { useState, useEffect } from 'react';
-import { getCurrentSemesterApi } from '../api/semester';
-import type { Semester } from '../types/semester';
-
-interface UseSemesterResult {
-    semester: Semester | null;
-    loading: boolean;
-    error: string | null;
-}
+import { useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { semestersCacheAtom } from '../store/semester';
+import { getAllSemestersApi, getCurrentSemesterApi } from '../api/semester';
 
 /**
- * Fetches and manages the state for the current semester.
+ * A hook that provides a cached list of all semesters and the current semester.
+ * Data is fetched only once and stored in a global Jotai atom.
  */
-export const useSemester = (): UseSemesterResult => {
-    const [semester, setSemester] = useState<Semester | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+export const useSemesters = () => {
+    const [cache, setCache] = useAtom(semestersCacheAtom);
+    const { all: semesters, current: currentSemester } = cache;
+    const loading = semesters.length === 0;
 
     useEffect(() => {
-        const fetchSemester = async () => {
-            try {
-                setLoading(true);
-                const semesterData = await getCurrentSemesterApi();
-                setSemester(semesterData);
-            } catch (err: any) {
-                console.error('Failed to fetch current semester:', err);
-                setError(
-                    err.response?.data?.error || 'Failed to load semester data.'
-                );
-            } finally {
-                setLoading(false);
-            }
-        };
+        // Only fetch if the cache is empty.
+        if (semesters.length === 0) {
+            const fetchAndCacheSemesters = async () => {
+                try {
+                    const [all, current] = await Promise.all([
+                        getAllSemestersApi(),
+                        getCurrentSemesterApi(),
+                    ]);
+                    setCache({ all, current });
+                } catch (error) {
+                    console.error(
+                        'Failed to fetch and cache semesters:',
+                        error
+                    );
+                }
+            };
+            fetchAndCacheSemesters();
+        }
+    }, [semesters.length, setCache]);
 
-        fetchSemester();
-    }, []); // Empty dependency array ensures this runs only once on mount
-
-    return { semester, loading, error };
+    return { semesters, currentSemester, loading };
 };

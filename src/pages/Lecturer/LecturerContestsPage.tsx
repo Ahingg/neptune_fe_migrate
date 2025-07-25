@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useLecturerClasses from '../../hooks/useLecturerClasses';
 import useClassContests from '../../hooks/useClassContests';
 import { useContestDetails } from '../../hooks/useContestDetail';
 import { createCasePdfFileUrl } from '../../utils/urlMaker';
+import { useLecturerClasses } from '../../hooks/useLecturerClasses';
 
 const LecturerContestsPage: React.FC = () => {
     const {

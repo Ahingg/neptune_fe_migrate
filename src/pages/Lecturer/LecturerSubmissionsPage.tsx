@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import useLecturerClasses from '../../hooks/useLecturerClasses';
 import useClassContests from '../../hooks/useClassContests';
 import { useClassContestSubmissions } from '../../hooks/useClassContestSubmissions';
 import type { SubmissionHistoryItem } from '../../types/submission';
+import type { Class } from '../../types/class';
+import { useLecturerClasses } from '../../hooks/useLecturerClasses';
 
 const LecturerSubmissionsPage: React.FC = () => {
     const { classes, loading: classesLoading } = useLecturerClasses();
@@ -47,7 +48,7 @@ const LecturerSubmissionsPage: React.FC = () => {
                         onChange={(e) => setSelectedClassId(e.target.value)}
                         disabled={classesLoading}
                     >
-                        {classes.map((cls) => (
+                        {classes.map((cls: Class) => (
                             <option
                                 key={cls.class_transaction_id}
                                 value={cls.class_transaction_id}
@@ -108,27 +109,36 @@ const SubmissionsTable: React.FC<{ submissions: SubmissionHistoryItem[] }> = ({
                 </tr>
             </thead>
             <tbody>
-                {submissions.map((sub) => (
-                    <tr key={sub.submission_id} className="hover">
-                        <td>{sub.username} - {sub.name}</td>
-                        <td>{sub.case_code}</td>
-                        <td
-                            className={
-                                sub.status === 'Accepted'
-                                    ? 'text-green-500 font-semibold'
-                                    : 'text-red-500'
-                            }
-                        >
-                            {sub.status}
-                        </td>
-                        <td className="text-center font-semibold">
-                            {sub.score}
-                        </td>
-                        <td className="text-xs">
-                            {new Date(sub.submit_time).toLocaleString()}
-                        </td>
-                    </tr>
-                ))}
+                {submissions
+                    .slice()
+                    .sort(
+                        (a, b) =>
+                            new Date(b.submit_time).getTime() -
+                            new Date(a.submit_time).getTime()
+                    )
+                    .map((sub) => (
+                        <tr key={sub.submission_id} className="hover">
+                            <td>
+                                {sub.username} - {sub.name}
+                            </td>
+                            <td>{sub.case_code}</td>
+                            <td
+                                className={
+                                    sub.status === 'Accepted'
+                                        ? 'text-green-500 font-semibold'
+                                        : 'text-red-500'
+                                }
+                            >
+                                {sub.status}
+                            </td>
+                            <td className="text-center font-semibold">
+                                {sub.score}
+                            </td>
+                            <td className="text-xs">
+                                {new Date(sub.submit_time).toLocaleString()}
+                            </td>
+                        </tr>
+                    ))}
             </tbody>
         </table>
     </div>

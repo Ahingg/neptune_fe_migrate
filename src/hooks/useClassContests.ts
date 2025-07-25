@@ -21,6 +21,7 @@ const useClassContests = (classId: string | undefined) => {
       .catch((e) => setError(e.message || "Failed to fetch contests"))
       .finally(() => setLoading(false));
   }, [classId]);
+  
 
   return { contests, loading, error };
 };

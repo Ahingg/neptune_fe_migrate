@@ -1,29 +1,18 @@
 import React from 'react';
 import { useAtomValue } from 'jotai';
 import { userAtom, isAdminAtom } from '../../store/auth';
-import { useSemester } from '../../hooks/useSemester';
-
-// Import all dashboard components
+import { useSemesters } from '../../hooks/useSemester';
 import QuickActions from '../../components/dashboard/QuickActions';
 import DashboardContent from '../../components/dashboard/DashboardContent';
 import GlobalContestList from '../../components/dashboard/GlobalContestList';
 import type { UserEnrollmentDetail } from '../../types/auth';
+import AdminDashboardPage from '../Admin/AdminDashboardPage';
 // A specific view for Admins
-const AdminDashboard: React.FC = () => (
-    <div className="p-8">
-        <h1 className="text-3xl font-bold text-blue-700">Admin Dashboard</h1>
-        <p className="text-gray-500 mt-2">
-            Welcome, Admin. Use the navigation to manage contests, cases, and
-            classes.
-        </p>
-        {/* Admin-specific components can be added here in the future */}
-    </div>
-);
 
 // A specific view for Students
 const StudentDashboard: React.FC = () => {
     const user = useAtomValue(userAtom);
-    const { semester, loading: semesterLoading } = useSemester();
+    const { currentSemester, loading: semesterLoading } = useSemesters();
 
     if (!user || semesterLoading) {
         return (
@@ -35,7 +24,7 @@ const StudentDashboard: React.FC = () => {
 
     const currentEnrollments =
         user.enrollments?.filter(
-            (e: UserEnrollmentDetail) => e.semester_id === semester?.semester_id
+            (e: UserEnrollmentDetail) => e.semester_id === currentSemester?.semester_id
         ) || [];
 
     return (
@@ -44,7 +33,7 @@ const StudentDashboard: React.FC = () => {
             <section className="lg:w-3/4 xl:w-4/5 flex flex-col gap-8">
                 <DashboardContent
                     user={user}
-                    semester={semester}
+                    semester={currentSemester}
                     enrollments={currentEnrollments}
                 />
                 <GlobalContestList />
@@ -76,7 +65,7 @@ const DashboardPage: React.FC = () => {
             <main className="px-4 sm:px-6 lg:px-8 py-8">
                 <div className="max-w-screen-2xl mx-auto">
                     {/* Render the correct dashboard based on the user's role */}
-                    {isAdmin ? <AdminDashboard /> : <StudentDashboard />}
+                    {isAdmin ? <AdminDashboardPage /> : <StudentDashboard />}
                 </div>
             </main>
         </div>

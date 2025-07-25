@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import useLecturerClasses from '../../hooks/useLecturerClasses';
 import useClassContests from '../../hooks/useClassContests';
 import { useLeaderboardData } from '../../hooks/useLeaderboardData';
 import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
+import { useLecturerClasses } from '../../hooks/useLecturerClasses';
 
 const LecturerLeaderboardPage: React.FC = () => {
     const { classes, loading: classesLoading } = useLecturerClasses();

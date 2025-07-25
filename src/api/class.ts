@@ -12,6 +12,7 @@ export const getClassByIdApi = async (classId: string) => {
   return res.data;
 };
 
+
 /**
  * Fetches all contests assigned to a specific class.
  * @param classTransactionId The ID of the class.

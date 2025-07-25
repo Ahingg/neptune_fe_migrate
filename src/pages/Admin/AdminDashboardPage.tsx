@@ -1,20 +1,17 @@
 import React from 'react';
+import QuickActions from '../../components/dashboard/QuickActions';
 
-const AdminDashboardPage: React.FC = () => {
-    return (
-        <main className="p-4 sm:p-6 lg:p-8">
-            <div className="max-w-screen-2xl mx-auto">
-                <h1 className="text-3xl font-bold text-blue-700">
-                    Admin Dashboard
-                </h1>
-                <p className="mt-2 text-gray-600">
-                    Welcome, Admin. Use the navigation links to manage the
-                    platform.
-                </p>
-                {/* You can add admin-specific widgets or stats here in the future */}
-            </div>
-        </main>
-    );
-};
+const AdminDashboardPage: React.FC = () => (
+    <div className="p-8">
+        <h1 className="text-3xl font-bold text-blue-700">Admin Dashboard</h1>
+        <p className="text-gray-500 mt-2 mb-4">
+            Welcome, Admin. Use the navigation to manage contests, cases, and
+            classes.
+
+        </p>
+        <QuickActions/>
+        {/* Admin-specific components can be added here in the future */}
+    </div>
+);
 
 export default AdminDashboardPage;

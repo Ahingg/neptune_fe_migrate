@@ -1,17 +1,17 @@
 import React from 'react';
-import useLecturerClasses from '../../hooks/useLecturerClasses';
 import ActionCard from '../../components/cards/ActionCard';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '../../store/auth';
-import { useSemester } from '../../hooks/useSemester';
+import { useSemesters } from '../../hooks/useSemester';
 import ClassCard from '../../components/cards/ClassCard';
 import type { Class } from '../../types/class';
 import GlobalContestList from '../../components/dashboard/GlobalContestList';
+import { useLecturerClasses } from '../../hooks/useLecturerClasses';
 
 const LecturerDashboardPage: React.FC = () => {
     const { classes, loading, error } = useLecturerClasses();
     const user = useAtomValue(userAtom);
-    const { semester } = useSemester();
+    const { currentSemester } = useSemesters();
 
     return (
         <div className="container mx-auto p-6">
@@ -28,8 +28,8 @@ const LecturerDashboardPage: React.FC = () => {
                                 semester.
                             </p>
                             <div className="text-sm text-blue-700 bg-base-100 rounded-full px-4 py-1 font-semibold inline-block border border-gray-700">
-                                {semester
-                                    ? semester.description
+                                {currentSemester
+                                    ? currentSemester.description
                                     : 'Loading semester...'}
                             </div>
                         </div>

@@ -17,9 +17,9 @@ import LecturerSubmissionsPage from './pages/Lecturer/LecturerSubmissionsPage';
 import LecturerLeaderboardPage from './pages/Lecturer/LecturerLeaderboardPage';
 import LecturerSubmissionDetailPage from './pages/Lecturer/LecturerSubmissionDetailPage';
 import AdminSubmissionDetailPage from './pages/General/AdminSubmissionDetailPage';
-import AdminLeaderboardPage from './pages/General/LeaderboardPage';
 import NotFoundPage from './pages/General/NotFoundPage';
 import UnauthorizedPage from './pages/General/UnauthorizedPage';
+import AdminLeaderboardPage from './pages/Admin/AdminLeaderboardPage';
 
 const App: React.FC = () => {
     const location = useLocation();
@@ -63,10 +63,7 @@ const App: React.FC = () => {
                             path="/class/:classId/contest/:contestId/leaderboard"
                             element={<LeaderboardPage />}
                         />
-                        <Route
-                            path="/leaderboard"
-                            element={<AdminLeaderboardPage />}
-                        />
+
                         <Route
                             path="/contest/global/:contestId"
                             element={<ContestCasesPage />}
@@ -74,6 +71,10 @@ const App: React.FC = () => {
                         <Route
                             path="/contest/:contestId/leaderboard"
                             element={<LeaderboardPage />}
+                        />
+                        <Route
+                            path="/leaderboard"
+                            element={<AdminLeaderboardPage />}
                         />
                     </Route>
 

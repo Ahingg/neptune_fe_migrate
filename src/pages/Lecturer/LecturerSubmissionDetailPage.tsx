@@ -112,7 +112,7 @@ const LecturerSubmissionDetailPage: React.FC = () => {
                         </select>
 
                         <div className="flex-grow flex flex-col md:flex-row gap-4 min-h-0">
-                            <div className="md:w-1/2 bg-base-100/50 p-4 rounded-lg border border-gray-600 flex flex-col">
+                            <div className="md:w-2/5 bg-base-100/50 p-4 rounded-lg border border-gray-600 flex flex-col">
                                 <h3 className="font-bold text-blue-500 mb-2 flex-shrink-0">
                                     Submissions
                                 </h3>
@@ -167,7 +167,7 @@ const LecturerSubmissionDetailPage: React.FC = () => {
                                     </table>
                                 </div>
                             </div>
-                            <div className="md:w-1/2 flex flex-col">
+                            <div className="md:w-3/5 flex flex-col">
                                 <CodeViewer submission={selectedSubmission} />
                             </div>
                         </div>

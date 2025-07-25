@@ -2,6 +2,7 @@ import { useAtom } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
 import { userAtom } from '../store/auth.ts';
 import { loginApi, logoutApi, getMeApi } from '../api/auth';
+import type { LoginRequest } from '../types/auth';
 
 
 /**
