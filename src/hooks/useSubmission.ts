@@ -79,6 +79,9 @@ export const useSubmission = (
                 } else {
                     const submittedCase = cases.find((c: Case) => c.case_id === case_id);
                     const newHistoryItem: SubmissionHistoryItem = {
+                        name: null,
+                        username: null,
+                        user_id: null,
                         submission_id,
                         contest_id: contestId,
                         case_id,

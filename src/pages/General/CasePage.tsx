@@ -4,6 +4,7 @@ import type { Case } from '../../types/case';
 import CaseFormModal from '../../components/case/CaseFormModal';
 import TestCaseUploadModal from '../../components/case/TestCaseUploadModal';
 import { uploadTestCases } from '../../api/case';
+import { createCasePdfFileUrl } from '../../utils/urlMaker';
 
 const CasePage: React.FC = () => {
     const { cases, loading, error, createCase, updateCase, deleteCase } = useCases();
@@ -100,7 +101,7 @@ const CasePage: React.FC = () => {
                                     <td>{c.time_limit_ms}</td>
                                     <td>{c.memory_limit_mb}</td>
                                     <td>
-                                        <a href={c.pdf_file_url} target="_blank" rel="noopener noreferrer" className="link text-blue-800 underline">PDF</a>
+                                        <a href={createCasePdfFileUrl(c.pdf_file_url)} target="_blank" rel="noopener noreferrer" className="link text-blue-800 underline">PDF</a>
                                     </td>
                                     <td>
                                         <button className="btn btn-sm bg-blue-600 text-white font-semibold rounded-lg px-3 py-1 shadow border-none hover:bg-blue-700 transition-colors mr-2" onClick={() => handleEdit(c)}>Edit</button>
