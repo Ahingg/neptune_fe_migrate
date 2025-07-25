@@ -13,7 +13,7 @@ interface ProtectedRouteProps {
  */
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
     const { user, loading, isAuthenticated } = useAuth(); // Get auth state from custom hook
-
+    
     // Show a loading spinner while authentication status is being determined
     if (loading) {
         return (

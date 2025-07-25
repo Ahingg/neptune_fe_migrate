@@ -58,7 +58,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ submission }) => {
     }
 
     return (
-        <div className="bg-base-100 rounded-xl text-sm flex-1 h-full overflow-auto relative">
+        <div className="bg-base-100 rounded-xl text-sm flex-1 h-full relative">
             <button
                 onClick={handleDownload}
                 className="btn btn-ghost btn-sm absolute top-2 right-2 z-10"

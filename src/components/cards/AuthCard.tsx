@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from '../../../public/neptune_logo.png'
+import Image from '../../../src/assets/neptune_logo.png'
 
 type AuthCardProps = {
     children: React.ReactNode; // The form elements will be passed as children

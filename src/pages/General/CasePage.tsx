@@ -1,133 +1,154 @@
 import React, { useState } from 'react';
+import { Plus, UploadCloud } from 'lucide-react';
 import useCases from '../../hooks/useCases';
-import type { Case } from '../../types/case';
+import { useAdminPage } from '../../hooks/useAdminPage';
+import AdminPageLayout from '../../components/admin/AdminPageLayout';
 import CaseFormModal from '../../components/case/CaseFormModal';
 import TestCaseUploadModal from '../../components/case/TestCaseUploadModal';
 import { uploadTestCases } from '../../api/case';
-import { createCasePdfFileUrl } from '../../utils/urlMaker';
+import type { Case } from '../../types/case';
 
 const CasePage: React.FC = () => {
-    const { cases, loading, error, createCase, updateCase, deleteCase } = useCases();
-    const [showModal, setShowModal] = useState(false);
-    const [editCase, setEditCase] = useState<Case | null>(null);
-    const [modalLoading, setModalLoading] = useState(false);
+    const {
+        cases,
+        loading: casesLoading,
+        error: casesError,
+        createCase,
+        updateCase,
+        deleteCase,
+    } = useCases();
+    const {
+        loading: modalLoading,
+        error: modalError,
+        feedback,
+        handleApiCall,
+        setError,
+    } = useAdminPage();
+
+    const [showFormModal, setShowFormModal] = useState(false);
     const [showTestModal, setShowTestModal] = useState(false);
-    const [testLoading, setTestLoading] = useState(false);
-    const [feedback, setFeedback] = useState('');
+    const [editingCase, setEditingCase] = useState<Case | null>(null);
 
     const handleAdd = () => {
-        setEditCase(null);
-        setShowModal(true);
+        setEditingCase(null);
+        setShowFormModal(true);
     };
     const handleEdit = (c: Case) => {
-        setEditCase(c);
-        setShowModal(true);
-    };
-    const handleDelete = async (id: string) => {
-        if (window.confirm('Are you sure you want to delete this case?')) {
-            await deleteCase(id);
-            setFeedback('Case deleted successfully.');
-        }
+        setEditingCase(c);
+        setShowFormModal(true);
     };
     const handleModalClose = () => {
-        setShowModal(false);
-        setEditCase(null);
-        setFeedback('');
-    };
-    const handleModalSubmit = async (formData: FormData, isEdit: boolean, caseId?: string) => {
-        setModalLoading(true);
-        try {
-            if (isEdit && caseId) {
-                await updateCase(caseId, Object.fromEntries(formData.entries()));
-                setFeedback('Case updated successfully.');
-            } else {
-                await createCase(formData);
-                setFeedback('Case created successfully.');
-            }
-            setShowModal(false);
-        } catch (e) {
-            setFeedback('Error saving case.');
-        } finally {
-            setModalLoading(false);
-        }
-    };
-    const handleTestModalClose = () => {
+        setShowFormModal(false);
         setShowTestModal(false);
-        setFeedback('');
+        setError(null);
     };
-    const handleTestModalSubmit = async (caseId: string, formData: FormData) => {
-        setTestLoading(true);
-        try {
-            await uploadTestCases(caseId, formData);
-            setFeedback('Test cases uploaded successfully.');
-            setShowTestModal(false);
-        } catch (e) {
-            setFeedback('Error uploading test cases.');
-        } finally {
-            setTestLoading(false);
+
+    const handleFormSubmit = async (formData: FormData) => {
+        const isEdit = !!editingCase;
+        const apiCall = isEdit
+            ? () =>
+                  updateCase(
+                      editingCase!.case_id,
+                      Object.fromEntries(formData.entries())
+                  )
+            : () => createCase(formData);
+        await handleApiCall(
+            apiCall,
+            `Case ${isEdit ? 'updated' : 'created'} successfully.`
+        );
+        if (!modalError) setShowFormModal(false);
+    };
+
+    const handleTestSubmit = async (caseId: string, formData: FormData) => {
+        await handleApiCall(
+            () => uploadTestCases(caseId, formData),
+            'Test cases uploaded successfully.'
+        );
+        if (!modalError) setShowTestModal(false);
+    };
+
+    const handleDelete = async (id: string) => {
+        if (window.confirm('Are you sure?')) {
+            await handleApiCall(
+                () => deleteCase(id),
+                'Case deleted successfully.'
+            );
         }
     };
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 rounded-2xl shadow-2xl p-8 border border-blue-100">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-extrabold text-blue-700 drop-shadow">Cases</h1>
-                    <div className="flex gap-2">
-                        <button className="btn bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 shadow border-none hover:bg-blue-700 transition-colors" onClick={handleAdd}>+ Add New Case</button>
-                        <button className="btn bg-blue-100 text-blue-800 font-semibold rounded-lg px-4 py-2 shadow border-none hover:bg-blue-200 transition-colors" onClick={() => setShowTestModal(true)}>Upload Test Cases</button>
-                    </div>
-                </div>
-                {feedback && <div className="mb-2 text-green-700">{feedback}</div>}
-                {loading && <div className="text-gray-800">Loading...</div>}
-                {error && <div className="text-red-700">{error}</div>}
+        <>
+            <AdminPageLayout
+                title="Case Management"
+                actions={
+                    <>
+                        <button className="btn btn-primary" onClick={handleAdd}>
+                            <Plus size={16} /> Add New Case
+                        </button>
+                        <button
+                            className="btn btn-secondary"
+                            onClick={() => setShowTestModal(true)}
+                        >
+                            <UploadCloud size={16} /> Upload Test Cases
+                        </button>
+                    </>
+                }
+                loading={casesLoading}
+                error={casesError || modalError}
+                feedback={feedback}
+            >
                 <div className="overflow-x-auto">
-                    <table className="table w-full text-blue-900">
-                        <thead>
-                            <tr className="bg-blue-50 text-blue-700">
+                    <table className="table w-full">
+                        <thead className="bg-base-100">
+                            <tr>
                                 <th>Name</th>
                                 <th>Problem Code</th>
-                                <th>Time Limit (ms)</th>
-                                <th>Memory Limit (MB)</th>
-                                <th>PDF</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {cases.map((c) => (
-                                <tr key={c.case_id} className="hover:bg-blue-100 transition-colors">
-                                    <td className="font-bold text-blue-800">{c.name}</td>
+                                <tr key={c.case_id} className="hover">
+                                    <td className="font-bold">{c.name}</td>
                                     <td>{c.problem_code}</td>
-                                    <td>{c.time_limit_ms}</td>
-                                    <td>{c.memory_limit_mb}</td>
                                     <td>
-                                        <a href={createCasePdfFileUrl(c.pdf_file_url)} target="_blank" rel="noopener noreferrer" className="link text-blue-800 underline">PDF</a>
-                                    </td>
-                                    <td>
-                                        <button className="btn btn-sm bg-blue-600 text-white font-semibold rounded-lg px-3 py-1 shadow border-none hover:bg-blue-700 transition-colors mr-2" onClick={() => handleEdit(c)}>Edit</button>
-                                        <button className="btn btn-sm bg-red-600 text-white font-semibold rounded-lg px-3 py-1 shadow border-none hover:bg-red-700 transition-colors" onClick={() => handleDelete(c.case_id)}>Delete</button>
+                                        <button
+                                            className="btn btn-sm btn-ghost"
+                                            onClick={() => handleEdit(c)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="btn btn-sm btn-ghost text-red-500"
+                                            onClick={() => handleDelete(c.case_id)}
+                                        >
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </AdminPageLayout>
+
             <CaseFormModal
-                open={showModal}
+                open={showFormModal}
                 onClose={handleModalClose}
-                onSubmit={handleModalSubmit}
+                onSubmit={handleFormSubmit}
                 loading={modalLoading}
-                initialData={editCase}
+                initialData={editingCase}
+                error={modalError}
             />
             <TestCaseUploadModal
                 open={showTestModal}
-                onClose={handleTestModalClose}
-                onSubmit={handleTestModalSubmit}
-                loading={testLoading}
+                onClose={handleModalClose}
+                onSubmit={handleTestSubmit}
+                loading={modalLoading}
                 caseList={cases}
+                error={modalError}
             />
-        </div>
+        </>
     );
 };
 

@@ -1,90 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { getAllSemestersApi, getCurrentSemesterApi } from '../../api/semester';
-import { getAllClassesBySemesterIdApi, getClassByIdApi } from '../../api/class';
-import { getMeApi } from '../../api/auth';
+import React, { useState, useEffect } from 'react';
+import { useLecturerClasses } from '../../hooks/useLecturerClasses';
 import ClassDetailPanel from '../../components/lecturer/ClassDetailPanel';
-import type { Semester } from '../../types/semester';
 import type { Class } from '../../types/class';
 import ClassListPanel from '../../components/lecturer/ClasstListPanel';
 
-const DEFAULT_COURSE_ID = '09a7b352-1f11-ec11-90f0-d8d385fce79e';
-
 const LecturerClassesPage: React.FC = () => {
-    const [semesters, setSemesters] = useState<Semester[]>([]);
-    const [selectedSemester, setSelectedSemester] = useState<string>('');
-    const [classes, setClasses] = useState<Class[]>([]);
+    // All complex logic is now cleanly handled by our custom hook.
+    const {
+        semesters,
+        selectedSemester,
+        setSelectedSemester,
+        classes,
+        loading,
+        error,
+    } = useLecturerClasses();
+
+    // The page now only needs to manage which class is currently being viewed.
     const [selectedClass, setSelectedClass] = useState<Class | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [userId, setUserId] = useState<string | null>(null);
 
-    // Fetch initial data: semesters and user ID
+    // This effect ensures a class is always selected by default if the list is not empty.
     useEffect(() => {
-        const fetchInitialData = async () => {
-            try {
-                setLoading(true);
-                const [allSemesters, currentSemester, me] = await Promise.all([
-                    getAllSemestersApi(),
-                    getCurrentSemesterApi(),
-                    getMeApi(),
-                ]);
-                setSemesters(allSemesters);
-                setSelectedSemester(currentSemester.semester_id);
-                setUserId(me.user.id);
-            } catch (e: any) {
-                setError(e.message || 'Failed to fetch initial data');
-            } finally {
-                setLoading(false);
+        if (classes.length > 0) {
+            const isSelectedClassStillValid = classes.some(
+                (c) =>
+                    c.class_transaction_id ===
+                    selectedClass?.class_transaction_id
+            );
+            if (!isSelectedClassStillValid) {
+                setSelectedClass(classes[0]);
             }
-        };
-        fetchInitialData();
-    }, []);
-
-    // Fetch classes when selected semester or user ID changes
-    useEffect(() => {
-        if (!selectedSemester || !userId) return;
-
-        const fetchClasses = async () => {
-            setLoading(true);
-            setError(null);
-            setClasses([]);
+        } else {
             setSelectedClass(null);
-
-            try {
-                const allClasses = await getAllClassesBySemesterIdApi(
-                    selectedSemester,
-                    DEFAULT_COURSE_ID
-                );
-                const details = await Promise.all(
-                    allClasses.map((cls) =>
-                        getClassByIdApi(cls.class_transaction_id)
-                    )
-                );
-
-                const filtered = details.filter((cls) =>
-                    (cls.assistants || []).some(
-                        (a: any) => a.user_id === userId
-                    )
-                );
-
-                setClasses(filtered);
-                if (filtered.length > 0) {
-                    setSelectedClass(filtered[0]);
-                } else {
-                    setError(
-                        'You are not assigned as an assistant for any classes in this semester.'
-                    );
-                }
-            } catch (e: any) {
-                console.error('Error fetching classes:', e);
-                setError(e.message || 'Failed to fetch classes');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchClasses();
-    }, [selectedSemester, userId]);
+        }
+    }, [classes, selectedClass]);
 
     return (
         <div className="container mx-auto py-6">
@@ -92,7 +40,6 @@ const LecturerClassesPage: React.FC = () => {
                 className="flex flex-col lg:flex-row gap-6"
                 style={{ minHeight: '80vh' }}
             >
-                {/* Left Panel */}
                 <div className="lg:w-1/3">
                     <ClassListPanel
                         semesters={semesters}

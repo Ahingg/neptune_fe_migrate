@@ -1,6 +1,7 @@
 export interface Contest {
   id: string;
   name: string;
+  scope: 'class' | 'global';
   description: string;
 }
 
