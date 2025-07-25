@@ -105,7 +105,6 @@ const CasePage: React.FC = () => {
                         <thead className="bg-base-100">
                             <tr>
                                 <th>Name</th>
-                                <th>Problem Code</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -113,7 +112,6 @@ const CasePage: React.FC = () => {
                             {cases.map((c) => (
                                 <tr key={c.case_id} className="hover">
                                     <td className="font-bold">{c.name}</td>
-                                    <td>{c.problem_code}</td>
                                     <td>
                                         <button
                                             className="btn btn-sm btn-ghost"
