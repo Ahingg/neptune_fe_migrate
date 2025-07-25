@@ -1,3 +1,4 @@
+import type { Semester } from '../types/semester';
 import axiosClient from './axiosClient';
 
 /**

@@ -23,7 +23,7 @@ const StudentList: React.FC<StudentListProps> = ({ students }) => {
     }, [students, searchTerm]);
 
     return (
-        <div className="bg-base-300 shadow-lg rounded-2xl p-6 border-1 border-gray-600">
+        <div className="bg-base-200 shadow-lg rounded-2xl p-6 border-1 border-gray-800">
             <div className="flex flex-col justify-between items-center mb-4">
                 <div className="w-full">
                     <h4 className="text-xl font-bold text-blue-700 mr-4 mb-2">
