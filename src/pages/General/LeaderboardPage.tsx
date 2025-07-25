@@ -38,8 +38,8 @@ const LeaderboardPage: React.FC = () => {
 
     const filteredRows = showOnlyMe
         ? leaderboardData.leaderboard.filter(
-              (row) => row.user_id === currentUser?.id
-          )
+            (row) => row.user_id === currentUser?.id
+        )
         : leaderboardData.leaderboard;
 
     return (

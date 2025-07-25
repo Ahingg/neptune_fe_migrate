@@ -45,12 +45,15 @@ const CasePage: React.FC = () => {
 
     const handleFormSubmit = async (formData: FormData) => {
         const isEdit = !!editingCase;
+        let data: Record<string, any> = Object.fromEntries(formData.entries());
+
+        // Convert time_limit_ms, memory_limit_kb, and memory_limit_mb to numbers if present
+        if (data.time_limit_ms) data.time_limit_ms = Number(data.time_limit_ms);
+        if (data.memory_limit_kb) data.memory_limit_kb = Number(data.memory_limit_kb);
+        if (data.memory_limit_mb) data.memory_limit_mb = Number(data.memory_limit_mb);
+
         const apiCall = isEdit
-            ? () =>
-                  updateCase(
-                      editingCase!.case_id,
-                      Object.fromEntries(formData.entries())
-                  )
+            ? () => updateCase(editingCase!.case_id, data)
             : () => createCase(formData);
         await handleApiCall(
             apiCall,

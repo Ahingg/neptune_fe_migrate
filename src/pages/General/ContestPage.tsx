@@ -50,11 +50,12 @@ const ContestPage: React.FC = () => {
                 await contestApi.deleteContest(contestId);
             }
             const contest = await contestApi.createContest(formData);
+            // Assign cases to contest for both global and class
+            await contestApi.assignCasesToContest(
+                contest.id,
+                formData.case_ids
+            );
             if (formData.scope === 'class') {
-                await contestApi.assignCasesToContest(
-                    contest.id,
-                    formData.case_ids
-                );
                 await Promise.all(
                     formData.class_ids.map((classId: string) =>
                         contestApi.assignContestToClass(classId, {
