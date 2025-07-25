@@ -17,6 +17,8 @@ import LecturerContestsPage from './pages/Lecturer/LecturerContestsPage';
 import LecturerSubmissionsPage from './pages/Lecturer/LecturerSubmissionsPage';
 import LecturerLeaderboardPage from './pages/Lecturer/LecturerLeaderboardPage';
 import LecturerSubmissionDetailPage from './pages/Lecturer/LecturerSubmissionDetailPage';
+import AdminSubmissionDetailPage from './pages/General/AdminSubmissionDetailPage';
+import AdminLeaderboardPage from './pages/General/LeaderboardPage';
 import NotFoundPage from './pages/General/NotFoundPage';
 import UnauthorizedPage from './pages/General/UnauthorizedPage';
 
@@ -60,6 +62,10 @@ const App: React.FC = () => {
                         <Route
                             path="/class/:classId/contest/:contestId/leaderboard"
                             element={<LeaderboardPage />}
+                        />
+                        <Route
+                            path="/leaderboard"
+                            element={<AdminLeaderboardPage />}
                         />
                         <Route
                             path="/contest/global/:contestId"

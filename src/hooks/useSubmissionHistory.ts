@@ -21,7 +21,7 @@ export const useSubmissionHistory = (
 ): UseSubmissionHistoryResult => {
   const [cache, setCache] = useAtom(submissionHistoryCacheAtom);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Use a ref to track which contest IDs have already been fetched in this session.
   const hasFetchedRef = useRef<Set<string>>(new Set());
 
@@ -37,7 +37,7 @@ export const useSubmissionHistory = (
         try {
           const data = await getSubmissionsForContestApi(contestId, classId);
           // Use the callback form to update the atom. This avoids needing `cache` in the dependency array.
-          setCache(prevCache => ({
+          setCache((prevCache) => ({
             ...prevCache,
             [contestId]: data,
           }));
@@ -52,8 +52,8 @@ export const useSubmissionHistory = (
 
       fetchHistory();
     }
-  // This effect should ONLY re-run if the contest or class ID changes.
-  // `setCache` is stable and won't cause re-runs.
+    // This effect should ONLY re-run if the contest or class ID changes.
+    // `setCache` is stable and won't cause re-runs.
   }, [contestId, classId, setCache]);
 
   const submissions = cache[contestId || ''] || [];

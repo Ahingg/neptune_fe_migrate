@@ -105,7 +105,6 @@ const LecturerClassesPage: React.FC = () => {
                         error={error}
                     />
                 </div>
-                {/* Right Panel */}
                 <div className="lg:w-2/3">
                     <ClassDetailPanel selectedClass={selectedClass} />
                 </div>
