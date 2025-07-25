@@ -11,7 +11,6 @@ import LeaderboardPage from './pages/General/LeaderboardPage';
 import CasePage from './pages/General/CasePage';
 import ContestPage from './pages/General/ContestPage';
 import ClassPage from './pages/General/ClassPage';
-import AdminSubmissionDetailPage from './pages/General/AdminSubmissionDetailPage';
 import LecturerClassesPage from './pages/Lecturer/LecturerClassesPage';
 import LecturerContestsPage from './pages/Lecturer/LecturerContestsPage';
 import LecturerSubmissionsPage from './pages/Lecturer/LecturerSubmissionsPage';
